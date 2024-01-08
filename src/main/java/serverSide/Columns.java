@@ -6,11 +6,11 @@ import org.jspace.Space;
 public class Columns {
 
     private String name;
-    private Space tasks = new RandomSpace(); // TODO: May change from a random space
+    private Space tasks; // TODO: May change from a random space
 
     public Columns(String name, Space tasks) {
         this.name = name;
-        this.tasks = tasks;
+        this.tasks = new RandomSpace();
     }
 
     public String getName() {
