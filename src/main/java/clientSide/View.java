@@ -1,4 +1,4 @@
 package clientSide;
 
-public class Test {
+public class View {
 }
