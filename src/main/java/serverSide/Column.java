@@ -33,25 +33,25 @@ public class Column {
         System.out.println("Added: " + task + " to " + name);
     }
 
-    // public void remove(Tuple task) throws InterruptedException {
-    //     if (tasks == null) {
-    //         System.out.println("No tasks in " + name);
-    //     } else {
-    //         tasks.getp(task.getTuple());
-    //         System.out.println("Removed: " + task + " from " + name);
-    //     }
-    // }
-
-    public void getTasks() throws InterruptedException {
-        List<Object[]> taskList = tasks.queryAll(new FormalField(Integer.class), new FormalField(String.class), new FormalField(String.class), new FormalField(Boolean.class));
-        for (Object[] obj : taskList) {
-            System.out.println("Tasks in " + name + ":");
-            System.out.println(Arrays.toString(obj));
+    public void remove(Tuple task, String taskName) throws InterruptedException {
+        if (tasks == null) {
+            System.out.println("No tasks in " + name);
+        } else if (task.getTuple()[1] == taskName) {
+            // tasks.getp(new ActualField(task.getTuple()[1]));
+            tasks.getp(new FormalField(Integer.class), new ActualField(taskName), new FormalField(String.class), new FormalField(Boolean.class));
+            System.out.println("Removed: " + task + " from " + name);
+        } else {
+            System.out.println("No task with name: " + taskName + " in " + name);
         }
     }
 
-    // TODO: remove(task)
-
+    public void getTasks() throws InterruptedException {
+        List<Object[]> taskList = tasks.queryAll(new FormalField(Integer.class), new FormalField(String.class), new FormalField(String.class), new FormalField(Boolean.class));
+        System.out.println("Tasks in " + name + ":");
+        for (Object[] obj : taskList) {
+            System.out.println(Arrays.toString(obj));
+        }
+    }
 
     // TODO: edit(task)
 
