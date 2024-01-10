@@ -11,13 +11,16 @@ public class View extends Application {
     public static void main(String[] args) throws InterruptedException {
         launch(args);
     }
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/clientSide/View.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("KanPlan");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+        primaryStage.setResizable(false);
+
     }
 
 
