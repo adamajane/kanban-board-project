@@ -4,7 +4,6 @@ import java.net.*;
 import java.io.*;
 
 public class ServerSocket implements Runnable {
-    private int port = 8080;
 
     public ServerSocket() {
     }
