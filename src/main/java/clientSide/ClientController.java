@@ -3,6 +3,8 @@ package clientSide;
 import com.google.gson.Gson;
 import serverSide.Task;
 
+import javafx.event.*;
+
 public class ClientController {
 
     private int clientID;
@@ -24,6 +26,14 @@ public class ClientController {
         this.token = token;
     }
 
+    public void addTask(ActionEvent e) {
+        System.out.println("Task created");
+    }
+
+    public void addTaskBacklog(ActionEvent e) {
+        System.out.println("Task created");
+    }
+
     // TODO: addRequest()
 
     // TODO: removeRequest()
@@ -37,7 +47,7 @@ public class ClientController {
     public void testRequest() {
         ClientSocket clientSocket = new ClientSocket();
 
-        Task obj = new Task(1,"Testing", "This is just a test", false);
+        Task obj = new Task(1, "Testing", "This is just a test", false);
         Gson gson = new Gson();
         String json = gson.toJson(obj);
         clientSocket.request(json);

@@ -13,7 +13,7 @@ public class View extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/clientSide/View.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("KanPlan");
         primaryStage.setScene(new Scene(root));
