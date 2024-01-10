@@ -5,7 +5,7 @@ import java.util.List;
 public class ServerController {
 
     private List<Integer> ClientList;
-    private List<Tasks> TaskList;
+    private List<Task> TaskList;
 
     public List<Integer> getClientList() {
         return ClientList;
@@ -15,11 +15,11 @@ public class ServerController {
         ClientList = clientList;
     }
 
-    public List<Tasks> getTaskList() {
+    public List<Task> getTaskList() {
         return TaskList;
     }
 
-    public void setTaskList(List<Tasks> taskList) {
+    public void setTaskList(List<Task> taskList) {
         TaskList = taskList;
     }
 
