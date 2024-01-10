@@ -2,43 +2,58 @@ package serverSide;
 
 import java.net.*;
 import java.io.*;
-import org.json.*;
 
-public class ServerSocket {
-    public static void main(String[] args) {
-        int port = 8080;
+public class ServerSocket implements Runnable {
+    private int port = 8080;
+
+    public ServerSocket() {
+    }
+
+    @Override
+    public void run() {
         try {
             // Create a server socket at port 8080
-            java.net.ServerSocket serverSocket = new java.net.ServerSocket(port);
+            java.net.ServerSocket serverSocket = new java.net.ServerSocket(8080);
 
-            // Wait for client connection
-            System.out.println("Server waiting for client...");
-            Socket socket = serverSocket.accept();
-            System.out.println("Client connected.");
+            // Run indefinitely to accept multiple client connections
+            while (true) {
+                System.out.println("Server waiting for client...");
+                Socket socket = serverSocket.accept();
+                System.out.println("Client connected.");
 
-            // Create input and output streams for communication
-            BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter outputToClient = new PrintWriter(socket.getOutputStream(), true);
+                // Handle each client connection in a separate thread
+                ClientHandler clientHandler = new ClientHandler(socket);
+                new Thread(clientHandler).start();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
 
-            // Create a JSON object
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("Column", "Backlog");
-            jsonObject.put("Name", "New task");
-            jsonObject.put("Description", "JSON sent from server");
+    class ClientHandler implements Runnable {
+        private Socket clientSocket;
 
-            // Read data from client and display
-            String messageFromClient;
-            while ((messageFromClient = inputFromClient.readLine()) != null) {
+        public ClientHandler(Socket socket) {
+            this.clientSocket = socket;
+        }
+
+        @Override
+        public void run() {
+            try {
+                BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                PrintWriter outputToClient = new PrintWriter(clientSocket.getOutputStream(), true);
+
+                // Read data sent from the client
+                String messageFromClient = inputFromClient.readLine();
                 System.out.println("Client: " + messageFromClient);
+
                 // Example response to client
                 outputToClient.println("Server received: " + messageFromClient);
 
-                // Send JSON object to client
-                outputToClient.println(jsonObject.toString());
-
-                // Read JSON data from server
+                // Read JSON data from client
                 String jsonString = inputFromClient.readLine();
-                System.out.println("Received from server: " + jsonString);
+                System.out.println("Received from client: " + jsonString);
 
                 // Save JSON string to a JSON file
                 try (FileWriter fileWriter = new FileWriter("src/main/resources/server_data.json")) {
@@ -47,15 +62,13 @@ public class ServerSocket {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
 
-            // Close resources
-            inputFromClient.close();
-            outputToClient.close();
-            socket.close();
-            serverSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+                // Close resources
+                inputFromClient.close();
+                outputToClient.close();
+                clientSocket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
-}
