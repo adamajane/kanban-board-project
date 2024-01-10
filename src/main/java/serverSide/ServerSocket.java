@@ -41,7 +41,7 @@ public class ServerSocket {
                 System.out.println("Received from server: " + jsonString);
 
                 // Save JSON string to a JSON file
-                try (FileWriter fileWriter = new FileWriter("JSON/server_data.json")) {
+                try (FileWriter fileWriter = new FileWriter("src/main/resources/server_data.json")) {
                     fileWriter.write(jsonString);
                     System.out.println("JSON data saved to server_data.json");
                 } catch (IOException e) {

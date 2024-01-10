@@ -39,7 +39,7 @@ public class ClientSocket {
             outputToServer.println(jsonObject.toString());
 
             // Save JSON string to a JSON file
-            try (FileWriter fileWriter = new FileWriter("JSON/client_data.json")) {
+            try (FileWriter fileWriter = new FileWriter("src/main/resources/client_data.json")) {
                 fileWriter.write(jsonString);
                 System.out.println("JSON data saved to client_data.json");
             } catch (IOException e) {
