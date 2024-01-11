@@ -1,6 +1,7 @@
 package serverSide;
 
 import com.google.gson.Gson;
+import org.jspace.Tuple;
 import util.ReadJSONFromFile;
 
 import java.nio.file.Files;
@@ -42,12 +43,12 @@ public class ServerController {
             // Deserialize JSON to Java object
             if (json != null && !json.isEmpty()) {
                 Gson gson = new Gson();
-                Task task = gson.fromJson(json, Task.class);
+                Tuple task = gson.fromJson(json, Tuple.class);
 
                 // print task getters for testing
-                System.out.println("TaskID: " + task.getTaskID());
-                System.out.println("Name: " + task.getName());
-                System.out.println("Description: " + task.getDescription());
+                System.out.println("TaskID: " + task.getElementAt(0));
+                System.out.println("Name: " + task.getElementAt(1));
+                System.out.println("Description: " + task.getElementAt(2));
             }
         }
     }
