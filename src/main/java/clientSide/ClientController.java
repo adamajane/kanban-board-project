@@ -47,7 +47,7 @@ public class ClientController {
     public void testRequest() {
         ClientSocket clientSocket = new ClientSocket();
 
-        Task obj = new Task(1, "Testing", "This is just a test", false);
+        Task obj = new Task(2, "Testing", "This is just a test", false);
         Gson gson = new Gson();
         String json = gson.toJson(obj);
         clientSocket.request(json);
