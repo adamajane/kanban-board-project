@@ -26,19 +26,28 @@ public class ServerRemoteSpace {
 
         while (true) {
             Object[] t = backlog.getColumnSpace().get(new FormalField(String.class));
-            System.out.println("backlog tuple:" + t[0]);
+            System.out.println("Backlog tuple: " + t[0]);
             if (t != null) {
                 backlog.getColumnSpace().put(t[0]);
             }
 
             Object[] t1 = doing.getColumnSpace().get(new FormalField(String.class));
-            System.out.println("doing tuple:" + t1[0]);
+            System.out.println("Doing tuple: " + t1[0]);
+            if (t1 != null) {
+                doing.getColumnSpace().put(t1[0]);
+            }
 
             Object[] t2 = review.getColumnSpace().get(new FormalField(String.class));
-            System.out.println("review tuple:" + t2[0]);
+            System.out.println("Review tuple: " + t2[0]);
+            if (t2 != null) {
+                review.getColumnSpace().put(t2[0]);
+            }
 
             Object[] t3 = done.getColumnSpace().get(new FormalField(String.class));
-            System.out.println("done tuple:" + t3[0]);
+            System.out.println("Done tuple: " + t3[0]);
+            if (t3 != null) {
+                done.getColumnSpace().put(t3[0]);
+            }
         }
     }
 }

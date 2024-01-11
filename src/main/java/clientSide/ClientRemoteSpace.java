@@ -36,7 +36,14 @@ public class ClientRemoteSpace {
     }
 
     public static void mainScreen() throws InterruptedException {
-        printSpace(backlog);
+        printSpaceTasks(backlog, "Backlog");
+        System.out.println(" ");
+        printSpaceTasks(doing, "Doing");
+        System.out.println(" ");
+        printSpaceTasks(review, "Review");
+        System.out.println(" ");
+        printSpaceTasks(done, "Done");
+        System.out.println(" ");
 
         //List<Object[]> doingList = doing.queryAll(new FormalField(String.class));
         //System.out.println("Tasks in Doing:");
@@ -92,34 +99,61 @@ public class ClientRemoteSpace {
         }
     }
 
-    private static void printSpace(Space space) throws InterruptedException {
-        List<Object[]> backlogList = space.queryAll(new FormalField(String.class));
-        System.out.println("Tasks in Backlog:");
-        for (Object[] obj : backlogList) {
-            //if (obj.length == 0) {
-            //    System.out.println("No tasks in Backlog");
-            //} else {
-            String data = (String) obj[0];
-            System.out.println(data);
-            //}
-            //System.out.println(Arrays.toString(obj));
+    private static void printSpaceTasks(Space space, String spaceName) throws InterruptedException {
+        List<Object[]> taskList = space.queryAll(new FormalField(String.class));
+        System.out.println("Tasks in " + spaceName + ":");
+        if (taskList.isEmpty()) {
+            System.out.println("No tasks in " + spaceName);
+        } else {
+            for (Object[] obj : taskList) {
+                String data = (String) obj[0];
+                System.out.println(data);
+            }
         }
     }
 
+
     public static void addTask() {
-        System.out.println("Please enter the name of the task:");
         Scanner input = new Scanner(System.in);
+
+        System.out.println("Choose the column you want to add the task to:");
+        System.out.println("1. Backlog");
+        System.out.println("2. Doing");
+        System.out.println("3. Review");
+        System.out.println("4. Done");
+
+        int columnChoice = input.nextInt();
+        input.nextLine(); // This is necessary to consume the newline after the integer input
+
+        System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
-        // System.out.println("Please enter the description of the task:");
-        // String taskDescription = input.nextLine();
-        Tuple task = new Tuple(taskName);
-        //System.out.println("Task: " + task + " added to Backlog");
+
         try {
-            backlog.put(taskName);
+            switch (columnChoice) {
+                case 1:
+                    backlog.put(taskName);
+                    System.out.println("Task added to Backlog");
+                    break;
+                case 2:
+                    doing.put(taskName);
+                    System.out.println("Task added to Doing");
+                    break;
+                case 3:
+                    review.put(taskName);
+                    System.out.println("Task added to Review");
+                    break;
+                case 4:
+                    done.put(taskName);
+                    System.out.println("Task added to Done");
+                    break;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
+
 
 }
