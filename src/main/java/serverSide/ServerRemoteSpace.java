@@ -11,11 +11,18 @@ public class ServerRemoteSpace {
 
         SpaceRepository repository = new SpaceRepository();
         repository.addGate(uri);
-        Space space = new SequentialSpace();
-        repository.add("space", space);
+        Space backlog = new SequentialSpace();
+        Space doing = new SequentialSpace();
+        Space review = new SequentialSpace();
+        Space done = new SequentialSpace();
+        repository.add("backlog", backlog);
+        repository.add("doing", doing);
+        repository.add("review", review);
+        repository.add("done", done);
+
 
         while (true) {
-            Object[] t = space.query(new FormalField(String.class), new FormalField(String.class));
+            Object[] t = backlog.query(new FormalField(String.class), new FormalField(String.class));
             System.out.println(t[0]);
         }
     }

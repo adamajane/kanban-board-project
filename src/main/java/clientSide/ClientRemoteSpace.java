@@ -9,11 +9,15 @@ import java.util.Scanner;
 
 public class ClientRemoteSpace {
     public static void main(String[] args) throws IOException, InterruptedException {
-        RemoteSpace chat = new RemoteSpace("tcp://10.209.152.92:8080/space?keep");
-        Scanner scan = new Scanner(System.in);
+        System.out.println("Welcome! Choose your board");
+        Scanner input = new Scanner(System.in);
+        String name = input.nextLine();
 
-        while(true) {
-            String message = scan.nextLine();
+        RemoteSpace chat = new RemoteSpace("tcp://10.209.152.92:8080/" + name + "?keep");
+
+        System.out.println("You're in " + chat.toString());
+        while (true) {
+            String message = input.nextLine();
             chat.put(message);
             String msg = Arrays.toString(chat.query(new FormalField(String.class)));
             System.out.println(msg);

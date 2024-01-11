@@ -12,7 +12,7 @@ public class ClientSocket {
     public void request(String json) {
         try {
             // Connect to server running on localhost at port 8080
-            Socket socket = new Socket("localhost", 8080);
+            Socket socket = new Socket("10.209.152.92", 8080);
 
             // Create input and output streams for communication
             BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
