@@ -50,8 +50,8 @@ public class ClientRemoteSpace {
         System.out.println("Please select an option:");
         System.out.println("1. Add a task");
         System.out.println("2. Remove a task");
-        System.out.println("3. Edit a task");
-        System.out.println("4. Move a task");
+        System.out.println("3. Move a task");
+        System.out.println("4. Edit a task");
         System.out.println("5. Update");
         System.out.println("6. Exit");
         System.out.println(" ");
@@ -66,10 +66,10 @@ public class ClientRemoteSpace {
                 removeTask(); // TODO: Can remove tasks. Has to throw exception if no task of that name exists
                 break;
             case 3:
-                // editTask();
+                moveTask();
                 break;
             case 4:
-                // moveTask();
+                // editTask();
                 break;
             case 5:
                 mainScreen();
@@ -180,5 +180,61 @@ public class ClientRemoteSpace {
             e.printStackTrace();
         }
     }
+
+    public static void moveTask() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Choose the column you want to move the task from:");
+        System.out.println("1. Backlog");
+        System.out.println("2. Doing");
+        System.out.println("3. Review");
+        System.out.println("4. Done");
+
+        int fromColumnChoice = input.nextInt();
+        input.nextLine();
+
+        System.out.println("Choose the column you want to move the task to:");
+        System.out.println("1. Backlog");
+        System.out.println("2. Doing");
+        System.out.println("3. Review");
+        System.out.println("4. Done");
+
+        int toColumnChoice = input.nextInt();
+        input.nextLine();
+
+        System.out.println("Please enter the name of the task:");
+        String taskName = input.nextLine();
+
+        try {
+            RemoteSpace fromSpace = getSpaceFromChoice(fromColumnChoice);
+            RemoteSpace toSpace = getSpaceFromChoice(toColumnChoice);
+
+            if (fromSpace != null && toSpace != null) {
+                fromSpace.getp(new ActualField(taskName));
+                toSpace.put(taskName);
+                System.out.println("Task moved successfully");
+            } else {
+                System.out.println("Invalid column choice");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static RemoteSpace getSpaceFromChoice(int choice) {
+        switch (choice) {
+            case 1:
+                return backlog;
+            case 2:
+                return doing;
+            case 3:
+                return review;
+            case 4:
+                return done;
+            default:
+                return null;
+        }
+    }
+
 
 }
