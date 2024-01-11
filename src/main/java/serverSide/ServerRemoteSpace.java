@@ -12,17 +12,26 @@ public class ServerRemoteSpace {
         SpaceRepository repository = new SpaceRepository();
         repository.addGate(uri);
         Space backlog = new SequentialSpace();
-//        Space doing = new SequentialSpace();
-//        Space review = new SequentialSpace();
-//        Space done = new SequentialSpace();
+        Space doing = new SequentialSpace();
+        Space review = new SequentialSpace();
+        Space done = new SequentialSpace();
         repository.add("backlog", backlog);
-//        repository.add("doing", doing);
-//        repository.add("review", review);
-//        repository.add("done", done);
+        repository.add("doing", doing);
+        repository.add("review", review);
+        repository.add("done", done);
 
         while (true) {
-            Object[] t = backlog.query(new FormalField(String.class));
-            System.out.println(t[0]);
+            Object[] t = backlog.get(new FormalField(String.class));
+            System.out.println("backlog tuple:" + t[0]);
+
+            Object[] t1 = doing.get(new FormalField(String.class));
+            System.out.println("doing tuple:" + t1[0]);
+
+            Object[] t2 = review.get(new FormalField(String.class));
+            System.out.println("review tuple:" + t2[0]);
+
+            Object[] t3 = done.get(new FormalField(String.class));
+            System.out.println("done tuple:" + t3[0]);
         }
     }
 }
