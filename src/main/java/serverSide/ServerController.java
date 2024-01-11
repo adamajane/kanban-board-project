@@ -2,6 +2,9 @@ package serverSide;
 
 import com.google.gson.Gson;
 import util.ReadJSONFromFile;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class ServerController {
@@ -31,19 +34,21 @@ public class ServerController {
         Thread serverThread = new Thread(serverSocket);
         serverThread.start();
 
-        ReadJSONFromFile readJSONFromFile = new ReadJSONFromFile();
 
         String filePath = "src/main/resources/server_data.json";
-        String json = readJSONFromFile.read(filePath);
-        // Deserialize JSON to Java object
-        if (json != null && !json.isEmpty()) {
-            Gson gson = new Gson();
-            Task task = gson.fromJson(json, Task.class);
+        if (Files.isReadable(Paths.get(filePath))) {
+            ReadJSONFromFile readJSONFromFile = new ReadJSONFromFile();
+            String json = readJSONFromFile.read(filePath);
+            // Deserialize JSON to Java object
+            if (json != null && !json.isEmpty()) {
+                Gson gson = new Gson();
+                Task task = gson.fromJson(json, Task.class);
 
-            // print task getters for testing
-//            System.out.println("TaskID: " + task.getTaskID());
-//            System.out.println("Name: " + task.getName());
-//            System.out.println("Description: " + task.getDescription());
+                // print task getters for testing
+                System.out.println("TaskID: " + task.getTaskID());
+                System.out.println("Name: " + task.getName());
+                System.out.println("Description: " + task.getDescription());
+            }
         }
     }
 
