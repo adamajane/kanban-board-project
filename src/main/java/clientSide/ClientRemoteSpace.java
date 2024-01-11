@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class ClientRemoteSpace {
 
-    static Space backlog;
+    static RemoteSpace backlog;
     static RemoteSpace doing;
     static RemoteSpace review;
     static RemoteSpace done;

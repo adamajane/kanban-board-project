@@ -27,6 +27,9 @@ public class ServerRemoteSpace {
         while (true) {
             Object[] t = backlog.getColumnSpace().get(new FormalField(String.class));
             System.out.println("backlog tuple:" + t[0]);
+            if (t != null) {
+                backlog.getColumnSpace().put(t[0]);
+            }
 
             Object[] t1 = doing.getColumnSpace().get(new FormalField(String.class));
             System.out.println("doing tuple:" + t1[0]);
