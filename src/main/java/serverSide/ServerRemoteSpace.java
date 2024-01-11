@@ -9,35 +9,33 @@ public class ServerRemoteSpace {
 
     // List<Column> columns;
     static Column backlog = new Column("backlog");
+    static Column doing = new Column("doing");
+    static Column review = new Column("review");
+    static Column done = new Column("done");
 
     public static void main(String[] args) throws InterruptedException {
         int port = 8080;
-        String uri = "tcp://localhost:" + port + "/?keep";
+        String uri = "tcp://127.0.0.1:" + port + "/?keep";
 
         SpaceRepository repository = new SpaceRepository();
         repository.addGate(uri);
         repository.add("backlog", backlog.getColumnSpace());
-        // Space backlog = new SequentialSpace();
-        // Space doing = new SequentialSpace();
-        // Space review = new SequentialSpace();
-        // Space done = new SequentialSpace();
-        // repository.add("backlog", backlog);
-        // repository.add("doing", doing);
-        // repository.add("review", review);
-        // repository.add("done", done);
+        repository.add("doing", doing.getColumnSpace());
+        repository.add("review", review.getColumnSpace());
+        repository.add("done", done.getColumnSpace());
 
         while (true) {
             Object[] t = backlog.getColumnSpace().get(new FormalField(String.class));
             System.out.println("backlog tuple:" + t[0]);
 
-            // Object[] t1 = doing.get(new FormalField(String.class));
-            // System.out.println("doing tuple:" + t1[0]);
+            Object[] t1 = doing.getColumnSpace().get(new FormalField(String.class));
+            System.out.println("doing tuple:" + t1[0]);
 
-            // Object[] t2 = review.get(new FormalField(String.class));
-            // System.out.println("review tuple:" + t2[0]);
+            Object[] t2 = review.getColumnSpace().get(new FormalField(String.class));
+            System.out.println("review tuple:" + t2[0]);
 
-            // Object[] t3 = done.get(new FormalField(String.class));
-            // System.out.println("done tuple:" + t3[0]);
+            Object[] t3 = done.getColumnSpace().get(new FormalField(String.class));
+            System.out.println("done tuple:" + t3[0]);
         }
     }
 }
