@@ -16,10 +16,10 @@ public class ClientRemoteSpace {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        backlog = new RemoteSpace("tcp://10.209.152.92:8080/backlog?keep");
-        doing = new RemoteSpace("tcp://10.209.152.92:8080/doing?keep");
-        review = new RemoteSpace("tcp://10.209.152.92:8080/review?keep");
-        done = new RemoteSpace("tcp://10.209.152.92:8080/done?keep");
+        backlog = new RemoteSpace("tcp://localhost:8080/backlog?keep");
+        // doing = new RemoteSpace("tcp://10.209.152.92:8080/doing?keep");
+        // review = new RemoteSpace("tcp://10.209.152.92:8080/review?keep");
+        // done = new RemoteSpace("tcp://10.209.152.92:8080/done?keep");
 
         //backlog.put("Tuple 1");
         //add
@@ -29,7 +29,7 @@ public class ClientRemoteSpace {
         //review.put("Tuple 3");
         //done.put("Tuple 4");
         add(backlog, new Tuple("Tuple 5"));
-        welcomeScreen();
+        // welcomeScreen();
         // while (true) {
         //     String message = scan.nextLine();
         //     backlog.put(message);
@@ -45,12 +45,17 @@ public class ClientRemoteSpace {
 
     public static void welcomeScreen() throws InterruptedException {
         System.out.println("Welcome to the KanPlan!");
-        System.out.println("Columns below");
+        System.out.println(" ");
         //System.out.println("Backlog");
         List<Object[]> taskList = backlog.queryAll(new FormalField(String.class));
         System.out.println("Tasks in Backlog:");
         for (Object[] obj : taskList) {
+            //if (obj.length == 0) {
+            //    System.out.println("No tasks in Backlog");
+            //} else {
             System.out.println(Arrays.toString(obj));
+            //}
+            //System.out.println(Arrays.toString(obj));
         }
 
 
