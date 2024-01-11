@@ -3,6 +3,7 @@ package clientSide;
 import com.google.gson.Gson;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.jspace.FormalField;
 import org.jspace.Tuple;
 import serverSide.Column; // TODO: Used for testing
 import serverSide.Task;
@@ -67,7 +68,7 @@ public class ClientController {
                 // Create the UI component for the task
                 TitledPane taskPane = new TitledPane(taskName, new Label(taskDescription));
 
-                // Assuming you have a method to generate a unique ID for each task
+                // Generate a random ID for the task
                 int taskID = generateUniqueTaskId();
 
                 // Create the Tuple for the task
@@ -92,6 +93,38 @@ public class ClientController {
             }
         }
     }
+
+    // First version of removeTask
+
+    public void removeTaskBacklog(ActionEvent e) {
+        // Get the selected task from the ListView
+        TitledPane selectedTaskPane = backlogColumn.getSelectionModel().getSelectedItem();
+
+        if (selectedTaskPane != null) {
+            // Remove the selected task from the ListView
+            backlogColumn.getItems().remove(selectedTaskPane);
+
+            // Remove the corresponding Tuple from the Column's tuple space
+            // This assumes you have a way to get the task ID or name to create an equivalent Tuple for removal
+            String taskName = selectedTaskPane.getText(); // Let's assume task names are unique for this example
+            Tuple taskTupleToRemove = new Tuple(new FormalField(Integer.class), taskName, new FormalField(String.class), new FormalField(Boolean.class));
+
+            try {
+                if (backlog != null) {
+                    backlog.remove(taskTupleToRemove, taskName);
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+                // Handle the exception, perhaps show an error message to the user
+            }
+
+            System.out.println("Task removed: " + taskName);
+        } else {
+            // No task was selected, handle this case appropriately
+            System.out.println("No task selected for removal.");
+        }
+    }
+
 
     private int generateUniqueTaskId() {
         Random random = new Random();
