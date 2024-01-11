@@ -45,23 +45,7 @@ public class ClientRemoteSpace {
         printSpaceTasks(done, "Done");
         System.out.println(" ");
 
-        //List<Object[]> doingList = doing.queryAll(new FormalField(String.class));
-        //System.out.println("Tasks in Doing:");
-        //for (Object[] obj : doingList) {
-        //    System.out.println(Arrays.toString(obj));
-        //}
 
-//        List<Object[]> reviewList = review.queryAll(new FormalField(String.class));
-//        System.out.println("Tasks in Review:");
-//        for (Object[] obj : reviewList) {
-//            System.out.println(Arrays.toString(obj));
-//        }
-//
-//        List<Object[]> doneList = done.queryAll(new FormalField(String.class));
-//        System.out.println("Tasks in Done:");
-//        for (Object[] obj : doneList) {
-//            System.out.println(Arrays.toString(obj));
-//        }
         System.out.println(" ");
         System.out.println("Please select an option:");
         System.out.println("1. Add a task");
@@ -79,7 +63,7 @@ public class ClientRemoteSpace {
                 addTask();
                 break;
             case 2:
-                // removeTask();
+                removeTask(); // TODO: Can remove tasks. Has to throw exception if no task of that name exists
                 break;
             case 3:
                 // editTask();
@@ -122,7 +106,7 @@ public class ClientRemoteSpace {
         System.out.println("3. Review");
         System.out.println("4. Done");
 
-        int columnChoice = input.nextInt();
+        int columnChoice = input.nextInt(); // TODO: Fix InputMismatchException here
         input.nextLine(); // This is necessary to consume the newline after the integer input
 
         System.out.println("Please enter the name of the task:");
@@ -155,5 +139,46 @@ public class ClientRemoteSpace {
         }
     }
 
+    public static void removeTask() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Choose the column you want to remove the task from:");
+        System.out.println("1. Backlog");
+        System.out.println("2. Doing");
+        System.out.println("3. Review");
+        System.out.println("4. Done");
+
+        int columnChoice = input.nextInt();
+        input.nextLine();
+
+        System.out.println("Please enter the name of the task:");
+        String taskName = input.nextLine();
+
+        try {
+            switch (columnChoice) {
+                case 1:
+                    backlog.getp(new ActualField(taskName));
+                    System.out.println("Task removed from Backlog");
+                    break;
+                case 2:
+                    doing.get(new ActualField(taskName));
+                    System.out.println("Task removed from Doing");
+                    break;
+                case 3:
+                    review.get(new ActualField(taskName));
+                    System.out.println("Task removed from Review");
+                    break;
+                case 4:
+                    done.get(new ActualField(taskName));
+                    System.out.println("Task removed from Done");
+                    break;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
