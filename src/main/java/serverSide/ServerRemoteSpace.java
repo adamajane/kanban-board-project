@@ -29,7 +29,7 @@ public class ServerRemoteSpace {
         String uri = "tcp://" + IP_ADDRESS + ":" + port + "/?keep";
 
         SpaceRepository repository = new SpaceRepository();
-        QueueSpace requests = new QueueSpace();
+        SequentialSpace requests = new SequentialSpace();
         repository.add("requests", requests);
         repository.add("backlog", backlog.getColumnSpace());
         repository.add("doing", doing.getColumnSpace());
