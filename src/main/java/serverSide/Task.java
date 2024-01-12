@@ -1,13 +1,13 @@
 package serverSide;
 
-public class Tasks {
+public class Task{
 
     private int taskID;
     private String name;
     private String description;
     private boolean token = true;
 
-    public Tasks(int taskID, String name, String description, boolean token) {
+    public Task(int taskID, String name, String description, boolean token) {
         this.taskID = taskID;
         this.name = name;
         this.description = description;
@@ -45,6 +45,8 @@ public class Tasks {
     public void setToken(boolean token) {
         this.token = token;
     }
+
+
 
 // TODO: Return which tuple space it's contained in?
 }
