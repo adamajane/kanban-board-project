@@ -24,6 +24,7 @@ public class ServerRemoteSpace {
         Object[] arguments;
         String columnName;
         String function;
+        String clientName;
 
         int port = 8080;
         String uri = "tcp://" + IP_ADDRESS + ":" + port + "/?keep";
@@ -66,72 +67,65 @@ public class ServerRemoteSpace {
 //            }
 //        }
 
-        // Keep serving requests to enter chatrooms
         while (true) {
 //            System.out.println("here1");
-            request = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
-//            System.out.println(request[0] + " " + request[1] + " " + request[2]);
-//            List<Object[]> taskList = requests.getAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
-//            for (Object[] obj : taskList) {
-//                String data = (String) obj[0];
-//                System.out.println(data);
-//            }
-
+            request = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
             function = (String) request[0];
             columnName = (String) request[1];
-            requests.put(function, columnName, (String) request[2]);
+            clientName = (String) request[3];
+            requests.put(function, columnName, (String) request[2], clientName);
 
             switch (function) {
                 case "add":
-                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     if (Objects.equals(columnName, "backlog")) {
-                        System.out.println("adding " + arguments[2] + " to backlog");
+                        System.out.println(arguments[3] + " is adding " + arguments[2] + " to backlog");
                         backlog.getColumnSpace().put((String) arguments[2]);
-                        responses.put("ok");
+                        responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "doing")) {
                         System.out.println("adding " + arguments[2] + " to doing");
                         doing.getColumnSpace().put((String) arguments[2]);
-                        responses.put("ok");
+                        responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "review")) {
                         System.out.println("adding " + arguments[2] + " to review");
                         review.getColumnSpace().put((String) arguments[2]);
-                        responses.put("ok");
+                        responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "done")) {
                         System.out.println("adding " + arguments[2] + " to done");
                         done.getColumnSpace().put((String) arguments[2]);
-                        responses.put("ok");
+                        responses.put((String) clientName,"ok");
                     } else {
-                        responses.put("ko");
+                        responses.put((String) clientName,"ko");
                     }
                     break;
                 case "remove":
-                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     String removeArgument = (String) arguments[2];
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println("removing " + arguments[2] + " from backlog");
                         backlog.getColumnSpace().get(new ActualField(removeArgument));
-                        responses.put("ok");
+                        responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "doing")) {
                         System.out.println("removing " + arguments[2] + " from doing");
                         doing.getColumnSpace().get(new ActualField(removeArgument));
-                        responses.put("ok");
+                        responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "review")) {
                         System.out.println("removing " + arguments[2] + " from review");
                         review.getColumnSpace().get(new ActualField(removeArgument));
-                        responses.put("ok");
+                        responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "done")) {
                         System.out.println("removing to " + arguments[2] + " from done");
                         done.getColumnSpace().get(new ActualField(removeArgument));
-                        responses.put("ok");
+                        responses.put((String) clientName,"ok");
                     }
                     else
-                        responses.put("ko");
+                        responses.put((String) clientName,"ko");
                     break;
                 default:
                     // ignore RPC for unknown functions

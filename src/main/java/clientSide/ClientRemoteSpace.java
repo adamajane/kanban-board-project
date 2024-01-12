@@ -3,6 +3,7 @@ package clientSide;
 import org.jspace.*;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +19,7 @@ public class ClientRemoteSpace {
     static RemoteSpace done;
     static RemoteSpace requests;
     static RemoteSpace responses;
+    static RemoteSpace clients;
     static String clientName;
 
 
@@ -46,8 +48,15 @@ public class ClientRemoteSpace {
     }
 
     public static void welcomeScreen() throws InterruptedException {
+        Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to KanPlan!");
         System.out.println(" ");
+        System.out.println("Insert your name here:");
+        clientName = scan.nextLine();
+        System.out.println(" ");
+        System.out.println("Connected as: " + clientName);
+        System.out.println(" ");
+
         while (true) {
             mainScreen();
         }
@@ -134,19 +143,19 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
-                    requests.put("add", "backlog", taskName);
+                    requests.put("add", "backlog", taskName, clientName);
                     System.out.println("Task added to Backlog");
                     break;
                 case 2:
-                    requests.put("add", "doing", taskName);
+                    requests.put("add", "doing", taskName, clientName);
                     System.out.println("Task added to Doing");
                     break;
                 case 3:
-                    requests.put("add", "review", taskName);
+                    requests.put("add", "review", taskName, clientName);
                     System.out.println("Task added to Review");
                     break;
                 case 4:
-                    requests.put("add", "done", taskName);
+                    requests.put("add", "done", taskName, clientName);
                     System.out.println("Task added to Done");
                     break;
                 default:
@@ -178,22 +187,22 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
-                    requests.put("remove", "backlog", taskName);
+                    requests.put("remove", "backlog", taskName, clientName);
 //                    backlog.getp(new ActualField(taskName));
                     System.out.println("Task removed from Backlog");
                     break;
                 case 2:
-                    requests.put("remove", "doing", taskName);
+                    requests.put("remove", "doing", taskName, clientName);
 //                    doing.get(new ActualField(taskName));
                     System.out.println("Task removed from Doing");
                     break;
                 case 3:
-                    requests.put("remove", "review", taskName);
+                    requests.put("remove", "review", taskName, clientName);
 //                    review.get(new ActualField(taskName));
                     System.out.println("Task removed from Review");
                     break;
                 case 4:
-                    requests.put("remove", "done", taskName);
+                    requests.put("remove", "done", taskName, clientName);
 //                    done.get(new ActualField(taskName));
                     System.out.println("Task removed from Done");
                     break;
@@ -262,9 +271,10 @@ public class ClientRemoteSpace {
     }
 
     public static void refreshTaskLists() throws InterruptedException {
-        Object[] response = responses.get(new FormalField(String.class));
-        String responseString = (String) response[0];
+        Object[] response = responses.get(new ActualField(clientName), new FormalField(String.class));
+        String responseString = (String) response[1];
         if (Objects.equals(responseString, "ok")) {
+            System.out.println("\n\n\n\n");
             printSpaceTasks(backlog, "Backlog");
             printSpaceTasks(doing, "Doing");
             printSpaceTasks(review, "Review");
