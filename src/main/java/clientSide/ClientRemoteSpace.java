@@ -75,7 +75,7 @@ public class ClientRemoteSpace {
                 addTask(requests);
                 break;
             case 2:
-                removeTask(); // TODO: Can remove tasks. Has to throw exception if no task of that name exists
+                removeTask(requests); // TODO: Can remove tasks. Has to throw exception if no task of that name exists
                 break;
             case 3:
                 moveTask();
@@ -152,7 +152,7 @@ public class ClientRemoteSpace {
         }
     }
 
-    public static void removeTask() {
+    public static void removeTask(Space requests) {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to remove the task from:");
@@ -170,19 +170,23 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
-                    backlog.getp(new ActualField(taskName));
+                    requests.put("remove", "backlog", taskName);
+//                    backlog.getp(new ActualField(taskName));
                     System.out.println("Task removed from Backlog");
                     break;
                 case 2:
-                    doing.get(new ActualField(taskName));
+                    requests.put("remove", "doing", taskName);
+//                    doing.get(new ActualField(taskName));
                     System.out.println("Task removed from Doing");
                     break;
                 case 3:
-                    review.get(new ActualField(taskName));
+                    requests.put("remove", "review", taskName);
+//                    review.get(new ActualField(taskName));
                     System.out.println("Task removed from Review");
                     break;
                 case 4:
-                    done.get(new ActualField(taskName));
+                    requests.put("remove", "done", taskName);
+//                    done.get(new ActualField(taskName));
                     System.out.println("Task removed from Done");
                     break;
                 default:

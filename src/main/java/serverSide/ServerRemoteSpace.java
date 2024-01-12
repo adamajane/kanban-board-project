@@ -29,7 +29,7 @@ public class ServerRemoteSpace {
         String uri = "tcp://" + IP_ADDRESS + ":" + port + "/?keep";
 
         SpaceRepository repository = new SpaceRepository();
-        RandomSpace requests = new RandomSpace();
+        SequentialSpace requests = new SequentialSpace();
         repository.add("requests", requests);
         repository.add("backlog", backlog.getColumnSpace());
         repository.add("doing", doing.getColumnSpace());
@@ -81,9 +81,7 @@ public class ServerRemoteSpace {
 
             switch (function) {
                 case "add":
-                    System.out.println("in add");
                     arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
-                    System.out.println("add");
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println("adding to " + arguments[2] + " backlog");
                         backlog.getColumnSpace().put((String) arguments[2]);
@@ -100,40 +98,29 @@ public class ServerRemoteSpace {
                         System.out.println("adding to " + arguments[2] + " done");
                         done.getColumnSpace().put((String) arguments[2]);
                     }
-//                case "bar":
-//                    arguments = rpc.get(new ActualField(callID), new ActualField("args"), new FormalField(String.class), new FormalField(String.class));
-//                    rpc.put(callID, "result", bar((String) arguments[2], (String) arguments[3]));
+                case "remove":
+                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+                    String removeArgument = (String) arguments[2];
+                    if (Objects.equals(columnName, "backlog")) {
+                        System.out.println("adding to " + arguments[2] + " backlog");
+                        backlog.getColumnSpace().get(new ActualField(removeArgument));
+                    }
+                    if (Objects.equals(columnName, "doing")) {
+                        System.out.println("adding to " + arguments[2] + " doing");
+                        doing.getColumnSpace().get(new ActualField(removeArgument));
+                    }
+                    if (Objects.equals(columnName, "review")) {
+                        System.out.println("adding to " + arguments[2] + " review");
+                        review.getColumnSpace().get(new ActualField(removeArgument));
+                    }
+                    if (Objects.equals(columnName, "done")) {
+                        System.out.println("adding to " + arguments[2] + " done");
+                        done.getColumnSpace().get(new ActualField(removeArgument));
+                    }
                 default:
                     // ignore RPC for unknown functions
                     continue;
             }
         }
     }
-
-    private static void printSpaceTasks(Space space, String spaceName) throws InterruptedException {
-        List<Object[]> taskList = space.queryAll(new FormalField(String.class));
-        System.out.println("Tasks in " + spaceName + ":");
-        if (taskList.isEmpty()) {
-            System.out.println("No tasks in " + spaceName);
-        } else {
-            for (Object[] obj : taskList) {
-                String data = (String) obj[0];
-                System.out.println(data);
-            }
-        }
-    }
-
-    private static void printSpaceTasks2(Space space, String spaceName) throws InterruptedException {
-        List<Object[]> taskList = space.queryAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
-        System.out.println("Tasks in " + spaceName + ":");
-        if (taskList.isEmpty()) {
-            System.out.println("No tasks in " + spaceName);
-        } else {
-            for (Object[] obj : taskList) {
-                String data = (String) obj[0];
-                System.out.println(data);
-            }
-        }
-    }
-
 }
