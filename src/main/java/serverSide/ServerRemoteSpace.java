@@ -79,22 +79,22 @@ public class ServerRemoteSpace {
                 case "add":
                     arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     if (Objects.equals(columnName, "backlog")) {
-                        System.out.println(arguments[3] + " is adding " + arguments[2] + " to backlog");
+                        System.out.println(arguments[3] + " added " + arguments[2] + " to backlog");
                         backlog.getColumnSpace().put((String) arguments[2]);
                         responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "doing")) {
-                        System.out.println("adding " + arguments[2] + " to doing");
+                        System.out.println(arguments[3] + " added " + arguments[2] + " to doing");
                         doing.getColumnSpace().put((String) arguments[2]);
                         responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "review")) {
-                        System.out.println("adding " + arguments[2] + " to review");
+                        System.out.println(arguments[3] + " added " + arguments[2] + " to review");
                         review.getColumnSpace().put((String) arguments[2]);
                         responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "done")) {
-                        System.out.println("adding " + arguments[2] + " to done");
+                        System.out.println(arguments[3] + " added " + arguments[2] + " to done");
                         done.getColumnSpace().put((String) arguments[2]);
                         responses.put((String) clientName,"ok");
                     } else {
@@ -105,27 +105,28 @@ public class ServerRemoteSpace {
                     arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     String removeArgument = (String) arguments[2];
                     if (Objects.equals(columnName, "backlog")) {
-                        System.out.println("removing " + arguments[2] + " from backlog");
+                        System.out.println(arguments[3] + " removed " + arguments[2] + " from backlog");
                         backlog.getColumnSpace().get(new ActualField(removeArgument));
                         responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "doing")) {
-                        System.out.println("removing " + arguments[2] + " from doing");
+                        System.out.println(arguments[3] + " removed " + arguments[2] + " from doing");
                         doing.getColumnSpace().get(new ActualField(removeArgument));
                         responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "review")) {
-                        System.out.println("removing " + arguments[2] + " from review");
+                        System.out.println(arguments[3] + " removed " + arguments[2] + " from review");
                         review.getColumnSpace().get(new ActualField(removeArgument));
                         responses.put((String) clientName,"ok");
                     }
                     else if (Objects.equals(columnName, "done")) {
-                        System.out.println("removing to " + arguments[2] + " from done");
+                        System.out.println(arguments[3] + " removed " + arguments[2] + " from done");
                         done.getColumnSpace().get(new ActualField(removeArgument));
                         responses.put((String) clientName,"ok");
                     }
-                    else
-                        responses.put((String) clientName,"ko");
+                    else {
+                        responses.put((String) clientName, "ko");
+                    }
                     break;
                 default:
                     // ignore RPC for unknown functions
