@@ -5,6 +5,7 @@ import org.jspace.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static util.Config.IP_ADDRESS;
@@ -15,6 +16,9 @@ public class ClientRemoteSpace {
     static RemoteSpace doing;
     static RemoteSpace review;
     static RemoteSpace done;
+    static RemoteSpace requests;
+    static RemoteSpace responses;
+
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -22,7 +26,8 @@ public class ClientRemoteSpace {
         doing = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/doing?keep");
         review = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/review?keep");
         done = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/done?keep");
-        RemoteSpace requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
+        requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
+        responses = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/responses?keep");
 
         // for testing rpc
 //        requests.put("add", "backlog", "taskname");
@@ -32,22 +37,22 @@ public class ClientRemoteSpace {
 //            System.out.println(data);
 //        }
 
-        welcomeScreen(requests);
+        welcomeScreen();
         //backlog.put("Tuple 1");
         //doing.put("Tuple 2");
         //review.put("Tuple 3");
         //done.put("Tuple 4");
     }
 
-    public static void welcomeScreen(Space requests) throws InterruptedException {
+    public static void welcomeScreen() throws InterruptedException {
         System.out.println("Welcome to KanPlan!");
         System.out.println(" ");
         while (true) {
-            mainScreen(requests);
+            mainScreen();
         }
     }
 
-    public static void mainScreen(Space requests) throws InterruptedException {
+    public static void mainScreen() throws InterruptedException {
         printSpaceTasks(backlog, "Backlog");
         System.out.println(" ");
         printSpaceTasks(doing, "Doing");
@@ -72,10 +77,10 @@ public class ClientRemoteSpace {
 
         switch (userOption) {
             case 1:
-                addTask(requests);
+                addTask();
                 break;
             case 2:
-                removeTask(requests); // TODO: Can remove tasks. Has to throw exception if no task of that name exists
+                removeTask(); // TODO: Can remove tasks. Has to throw exception if no task of that name exists
                 break;
             case 3:
                 moveTask();
@@ -84,7 +89,7 @@ public class ClientRemoteSpace {
                 // editTask();
                 break;
             case 5:
-                mainScreen(requests);
+                mainScreen();
                 break;
             case 6:
                 System.exit(0);
@@ -109,7 +114,7 @@ public class ClientRemoteSpace {
     }
 
 
-    public static void addTask(Space requests) throws InterruptedException {
+    public static void addTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to add the task to:");
@@ -154,7 +159,7 @@ public class ClientRemoteSpace {
 
     }
 
-    public static void removeTask(Space requests) {
+    public static void removeTask() {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to remove the task from:");
@@ -256,10 +261,16 @@ public class ClientRemoteSpace {
     }
 
     public static void refreshTaskLists() throws InterruptedException {
-        printSpaceTasks(backlog, "Backlog");
-        printSpaceTasks(doing, "Doing");
-        printSpaceTasks(review, "Review");
-        printSpaceTasks(done, "Done");
+        Object[] response = responses.get(new FormalField(String.class));
+        String responseString = (String) response[0];
+        if (Objects.equals(responseString, "ok")) {
+            printSpaceTasks(backlog, "Backlog");
+            printSpaceTasks(doing, "Doing");
+            printSpaceTasks(review, "Review");
+            printSpaceTasks(done, "Done");
+        } else {
+            System.out.println("Server: bad response");
+        }
     }
 
 

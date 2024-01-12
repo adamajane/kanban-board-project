@@ -30,7 +30,9 @@ public class ServerRemoteSpace {
 
         SpaceRepository repository = new SpaceRepository();
         SequentialSpace requests = new SequentialSpace();
+        SequentialSpace responses = new SequentialSpace();
         repository.add("requests", requests);
+        repository.add("responses", responses);
         repository.add("backlog", backlog.getColumnSpace());
         repository.add("doing", doing.getColumnSpace());
         repository.add("review", review.getColumnSpace());
@@ -85,18 +87,22 @@ public class ServerRemoteSpace {
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println("adding " + arguments[2] + " to backlog");
                         backlog.getColumnSpace().put((String) arguments[2]);
+                        responses.put("ok");
                     }
-                    if (Objects.equals(columnName, "doing")) {
+                    else if (Objects.equals(columnName, "doing")) {
                         System.out.println("adding " + arguments[2] + " to doing");
                         doing.getColumnSpace().put((String) arguments[2]);
+                        responses.put("ok");
                     }
-                    if (Objects.equals(columnName, "review")) {
+                    else if (Objects.equals(columnName, "review")) {
                         System.out.println("adding " + arguments[2] + " to review");
                         review.getColumnSpace().put((String) arguments[2]);
+                        responses.put("ok");
                     }
-                    if (Objects.equals(columnName, "done")) {
+                    else if (Objects.equals(columnName, "done")) {
                         System.out.println("adding " + arguments[2] + " to done");
                         done.getColumnSpace().put((String) arguments[2]);
+                        responses.put("ok");
                     }
                     break;
                 case "remove":
@@ -105,19 +111,25 @@ public class ServerRemoteSpace {
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println("removing " + arguments[2] + " from backlog");
                         backlog.getColumnSpace().get(new ActualField(removeArgument));
+                        responses.put("ok");
                     }
-                    if (Objects.equals(columnName, "doing")) {
+                    else if (Objects.equals(columnName, "doing")) {
                         System.out.println("removing " + arguments[2] + " from doing");
                         doing.getColumnSpace().get(new ActualField(removeArgument));
+                        responses.put("ok");
                     }
-                    if (Objects.equals(columnName, "review")) {
+                    else if (Objects.equals(columnName, "review")) {
                         System.out.println("removing " + arguments[2] + " from review");
                         review.getColumnSpace().get(new ActualField(removeArgument));
+                        responses.put("ok");
                     }
-                    if (Objects.equals(columnName, "done")) {
+                    else if (Objects.equals(columnName, "done")) {
                         System.out.println("removing to " + arguments[2] + " from done");
                         done.getColumnSpace().get(new ActualField(removeArgument));
+                        responses.put("ok");
                     }
+                    else
+                        responses.put("ko");
                     break;
                 default:
                     // ignore RPC for unknown functions
