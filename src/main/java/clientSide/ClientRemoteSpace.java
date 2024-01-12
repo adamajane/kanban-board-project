@@ -150,6 +150,8 @@ public class ClientRemoteSpace {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        refreshTaskLists();
+
     }
 
     public static void removeTask() {
@@ -247,6 +249,13 @@ public class ClientRemoteSpace {
             default:
                 return null;
         }
+    }
+
+    public static void refreshTaskLists() throws InterruptedException {
+        printSpaceTasks(backlog, "Backlog");
+        printSpaceTasks(doing, "Doing");
+        printSpaceTasks(review, "Review");
+        printSpaceTasks(done, "Done");
     }
 
 

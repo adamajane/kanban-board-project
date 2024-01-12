@@ -109,31 +109,4 @@ public class ServerRemoteSpace {
             }
         }
     }
-
-    private static void printSpaceTasks(Space space, String spaceName) throws InterruptedException {
-        List<Object[]> taskList = space.queryAll(new FormalField(String.class));
-        System.out.println("Tasks in " + spaceName + ":");
-        if (taskList.isEmpty()) {
-            System.out.println("No tasks in " + spaceName);
-        } else {
-            for (Object[] obj : taskList) {
-                String data = (String) obj[0];
-                System.out.println(data);
-            }
-        }
-    }
-
-    private static void printSpaceTasks2(Space space, String spaceName) throws InterruptedException {
-        List<Object[]> taskList = space.queryAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
-        System.out.println("Tasks in " + spaceName + ":");
-        if (taskList.isEmpty()) {
-            System.out.println("No tasks in " + spaceName);
-        } else {
-            for (Object[] obj : taskList) {
-                String data = (String) obj[0];
-                System.out.println(data);
-            }
-        }
-    }
-
 }
