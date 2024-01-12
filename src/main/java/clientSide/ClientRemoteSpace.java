@@ -18,6 +18,7 @@ public class ClientRemoteSpace {
     static RemoteSpace done;
     static RemoteSpace requests;
     static RemoteSpace responses;
+    static String clientName;
 
 
     public static void main(String[] args) throws IOException, InterruptedException {

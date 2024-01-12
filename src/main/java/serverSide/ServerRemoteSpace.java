@@ -103,6 +103,8 @@ public class ServerRemoteSpace {
                         System.out.println("adding " + arguments[2] + " to done");
                         done.getColumnSpace().put((String) arguments[2]);
                         responses.put("ok");
+                    } else {
+                        responses.put("ko");
                     }
                     break;
                 case "remove":
