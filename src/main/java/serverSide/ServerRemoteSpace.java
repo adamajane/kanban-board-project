@@ -18,10 +18,8 @@ public class ServerRemoteSpace {
     static Column done = new Column("done");
 
 
-
     public static void main(String[] args) throws InterruptedException {
 
-        Object[] request;
         Object[] arguments;
         String columnName;
         String function;
@@ -30,13 +28,13 @@ public class ServerRemoteSpace {
         String uri = "tcp://" + IP_ADDRESS + ":" + port + "/?keep";
 
         SpaceRepository repository = new SpaceRepository();
-        repository.addGate(uri);
-        Space requestSpace = new SequentialSpace();
-        repository.add("requests", requestSpace);
+        RandomSpace requests = new RandomSpace();
+        repository.add("requests", requests);
         repository.add("backlog", backlog.getColumnSpace());
         repository.add("doing", doing.getColumnSpace());
         repository.add("review", review.getColumnSpace());
         repository.add("done", done.getColumnSpace());
+        repository.addGate(uri);
 
         // Only for testing
 //        while (true) {
@@ -67,12 +65,20 @@ public class ServerRemoteSpace {
 
         // Keep serving requests to enter chatrooms
         while (true) {
-            request = requestSpace.get(new FormalField(String.class), new ActualField(String.class), new FormalField(String.class));
+            System.out.println("here1");
+            Object[] request = requests.get(new FormalField(String.class), new ActualField(String.class), new FormalField(String.class));
+            System.out.println("here2");
+            List<Object[]> taskList = requests.getAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+            for (Object[] obj : taskList) {
+                String data = (String) obj[0];
+                System.out.println(data);
+            }
+
             function = (String) request[0];
             columnName = (String) request[1];
             switch (function) {
                 case "add":
-                    arguments = requestSpace.get(new ActualField(String.class), new ActualField(String.class), new FormalField(String.class));
+                    arguments = requests.get(new ActualField(String.class), new ActualField(String.class), new FormalField(String.class));
                     System.out.println("add");
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println("adding to " + arguments[2] + " backlog");
@@ -100,45 +106,29 @@ public class ServerRemoteSpace {
         }
     }
 
-    public static void addTask() {
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("Choose the column you want to add the task to:");
-        System.out.println("1. Backlog");
-        System.out.println("2. Doing");
-        System.out.println("3. Review");
-        System.out.println("4. Done");
-
-        int columnChoice = input.nextInt(); // TODO: Fix InputMismatchException here
-        input.nextLine(); // This is necessary to consume the newline after the integer input
-
-        System.out.println("Please enter the name of the task:");
-        String taskName = input.nextLine();
-
-        try {
-            switch (columnChoice) {
-                case 1:
-                    backlog.getColumnSpace().put(taskName);
-                    System.out.println("Task added to Backlog");
-                    break;
-                case 2:
-                    doing.getColumnSpace().put(taskName);
-                    System.out.println("Task added to Doing");
-                    break;
-                case 3:
-                    review.getColumnSpace().put(taskName);
-                    System.out.println("Task added to Review");
-                    break;
-                case 4:
-                    done.getColumnSpace().put(taskName);
-                    System.out.println("Task added to Done");
-                    break;
-                default:
-                    System.out.println("Invalid option");
-                    break;
+    private static void printSpaceTasks(Space space, String spaceName) throws InterruptedException {
+        List<Object[]> taskList = space.queryAll(new FormalField(String.class));
+        System.out.println("Tasks in " + spaceName + ":");
+        if (taskList.isEmpty()) {
+            System.out.println("No tasks in " + spaceName);
+        } else {
+            for (Object[] obj : taskList) {
+                String data = (String) obj[0];
+                System.out.println(data);
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        }
+    }
+
+    private static void printSpaceTasks2(Space space, String spaceName) throws InterruptedException {
+        List<Object[]> taskList = space.queryAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+        System.out.println("Tasks in " + spaceName + ":");
+        if (taskList.isEmpty()) {
+            System.out.println("No tasks in " + spaceName);
+        } else {
+            for (Object[] obj : taskList) {
+                String data = (String) obj[0];
+                System.out.println(data);
+            }
         }
     }
 

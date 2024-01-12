@@ -15,7 +15,6 @@ public class ClientRemoteSpace {
     static RemoteSpace doing;
     static RemoteSpace review;
     static RemoteSpace done;
-    static RemoteSpace requests;
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -23,24 +22,32 @@ public class ClientRemoteSpace {
         doing = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/doing?keep");
         review = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/review?keep");
         done = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/done?keep");
-        requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
+        RemoteSpace requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
 
-        welcomeScreen();
+        // for testing rpc
+        requests.put("add", "backlog", "taskname");
+        List<Object[]> taskList = requests.queryAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+        for (Object[] obj : taskList) {
+            String data = (String) obj[0] + " " + (String) obj[1] + " " + (String) obj[2];
+            System.out.println(data);
+        }
+
+        welcomeScreen(requests);
         //backlog.put("Tuple 1");
         //doing.put("Tuple 2");
         //review.put("Tuple 3");
         //done.put("Tuple 4");
     }
 
-    public static void welcomeScreen() throws InterruptedException {
+    public static void welcomeScreen(Space requests) throws InterruptedException {
         System.out.println("Welcome to KanPlan!");
         System.out.println(" ");
         while (true) {
-            mainScreen();
+            mainScreen(requests);
         }
     }
 
-    public static void mainScreen() throws InterruptedException {
+    public static void mainScreen(Space requests) throws InterruptedException {
         printSpaceTasks(backlog, "Backlog");
         System.out.println(" ");
         printSpaceTasks(doing, "Doing");
@@ -65,7 +72,7 @@ public class ClientRemoteSpace {
 
         switch (userOption) {
             case 1:
-                addTask();
+                addTask(requests);
                 break;
             case 2:
                 removeTask(); // TODO: Can remove tasks. Has to throw exception if no task of that name exists
@@ -77,7 +84,7 @@ public class ClientRemoteSpace {
                 // editTask();
                 break;
             case 5:
-                mainScreen();
+                mainScreen(requests);
                 break;
             case 6:
                 System.exit(0);
@@ -102,7 +109,7 @@ public class ClientRemoteSpace {
     }
 
 
-    public static void addTask() {
+    public static void addTask(Space requests) throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to add the task to:");
@@ -117,6 +124,7 @@ public class ClientRemoteSpace {
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
 
+
         try {
             switch (columnChoice) {
                 case 1:
@@ -124,15 +132,15 @@ public class ClientRemoteSpace {
                     System.out.println("Task added to Backlog");
                     break;
                 case 2:
-                    requests.put("add", "doing", taskName);
+                    requests.put("add", columnChoice, taskName);
                     System.out.println("Task added to Doing");
                     break;
                 case 3:
-                    requests.put("add", "review", taskName);
+                    requests.put("add", columnChoice, taskName);
                     System.out.println("Task added to Review");
                     break;
                 case 4:
-                    requests.put("add", "done", taskName);
+                    requests.put("add", columnChoice, taskName);
                     System.out.println("Task added to Done");
                     break;
                 default:
