@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import static util.Config.IP_ADDRESS;
+
 public class ClientRemoteSpace {
 
     static RemoteSpace backlog;
@@ -16,10 +18,10 @@ public class ClientRemoteSpace {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        backlog = new RemoteSpace("tcp://127.0.0.1:8080/backlog?keep");
-        doing = new RemoteSpace("tcp://127.0.0.1:8080/doing?keep");
-        review = new RemoteSpace("tcp://127.0.0.1:8080/review?keep");
-        done = new RemoteSpace("tcp://127.0.0.1:8080/done?keep");
+        backlog = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/backlog?keep");
+        doing = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/doing?keep");
+        review = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/review?keep");
+        done = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/done?keep");
         welcomeScreen();
         //backlog.put("Tuple 1");
         //doing.put("Tuple 2");

@@ -5,6 +5,8 @@ import org.jspace.*;
 import java.util.Arrays;
 import java.util.List;
 
+import static util.Config.IP_ADDRESS;
+
 public class ServerRemoteSpace {
 
     // List<Column> columns;
@@ -15,7 +17,7 @@ public class ServerRemoteSpace {
 
     public static void main(String[] args) throws InterruptedException {
         int port = 8080;
-        String uri = "tcp://127.0.0.1:" + port + "/?keep";
+        String uri = "tcp://" + IP_ADDRESS + ":" + port + "/?keep";
 
         SpaceRepository repository = new SpaceRepository();
         repository.addGate(uri);
