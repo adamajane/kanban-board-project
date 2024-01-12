@@ -23,10 +23,7 @@ public class ClientRemoteSpace {
         review = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/review?keep");
         done = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/done?keep");
         welcomeScreen();
-        //backlog.put("Tuple 1");
-        //doing.put("Tuple 2");
-        //review.put("Tuple 3");
-        //done.put("Tuple 4");
+
     }
 
     public static void welcomeScreen() throws InterruptedException {
@@ -212,9 +209,17 @@ public class ClientRemoteSpace {
             RemoteSpace toSpace = getSpaceFromChoice(toColumnChoice);
 
             if (fromSpace != null && toSpace != null) {
-                fromSpace.getp(new ActualField(taskName));
-                toSpace.put(taskName);
-                System.out.println("Task moved successfully");
+                // Attempt to retrieve the task from the source column
+                Object[] task = fromSpace.getp(new ActualField(taskName));
+
+                // Check if the task was successfully retrieved
+                if (task != null) {
+                    // Move the task to the target column
+                    toSpace.put(taskName);
+                    System.out.println("Task moved successfully");
+                } else {
+                    System.out.println("Task not found in the specified column. Move operation cancelled.");
+                }
             } else {
                 System.out.println("Invalid column choice");
             }
@@ -222,6 +227,7 @@ public class ClientRemoteSpace {
             e.printStackTrace();
         }
     }
+
 
     private static RemoteSpace getSpaceFromChoice(int choice) {
         switch (choice) {
