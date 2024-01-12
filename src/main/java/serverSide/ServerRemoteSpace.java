@@ -29,7 +29,7 @@ public class ServerRemoteSpace {
         String uri = "tcp://" + IP_ADDRESS + ":" + port + "/?keep";
 
         SpaceRepository repository = new SpaceRepository();
-        SequentialSpace requests = new SequentialSpace();
+        QueueSpace requests = new QueueSpace();
         repository.add("requests", requests);
         repository.add("backlog", backlog.getColumnSpace());
         repository.add("doing", doing.getColumnSpace());
@@ -83,19 +83,19 @@ public class ServerRemoteSpace {
                 case "add":
                     arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     if (Objects.equals(columnName, "backlog")) {
-                        System.out.println("adding to " + arguments[2] + " backlog");
+                        System.out.println("adding " + arguments[2] + " to backlog");
                         backlog.getColumnSpace().put((String) arguments[2]);
                     }
                     if (Objects.equals(columnName, "doing")) {
-                        System.out.println("adding to " + arguments[2] + " doing");
+                        System.out.println("adding " + arguments[2] + " to doing");
                         doing.getColumnSpace().put((String) arguments[2]);
                     }
                     if (Objects.equals(columnName, "review")) {
-                        System.out.println("adding to " + arguments[2] + " review");
+                        System.out.println("adding " + arguments[2] + " to review");
                         review.getColumnSpace().put((String) arguments[2]);
                     }
                     if (Objects.equals(columnName, "done")) {
-                        System.out.println("adding to " + arguments[2] + " done");
+                        System.out.println("adding " + arguments[2] + " to done");
                         done.getColumnSpace().put((String) arguments[2]);
                     }
                     break;
