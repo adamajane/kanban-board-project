@@ -15,6 +15,7 @@ public class ClientRemoteSpace {
     static RemoteSpace doing;
     static RemoteSpace review;
     static RemoteSpace done;
+    static RemoteSpace requests;
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -22,6 +23,8 @@ public class ClientRemoteSpace {
         doing = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/doing?keep");
         review = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/review?keep");
         done = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/done?keep");
+        requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
+
         welcomeScreen();
         //backlog.put("Tuple 1");
         //doing.put("Tuple 2");
@@ -117,19 +120,19 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
-                    backlog.put(taskName);
+                    requests.put("add", columnChoice, taskName);
                     System.out.println("Task added to Backlog");
                     break;
                 case 2:
-                    doing.put(taskName);
+                    requests.put("add", "doing", taskName);
                     System.out.println("Task added to Doing");
                     break;
                 case 3:
-                    review.put(taskName);
+                    requests.put("add", "review", taskName);
                     System.out.println("Task added to Review");
                     break;
                 case 4:
-                    done.put(taskName);
+                    requests.put("add", "done", taskName);
                     System.out.println("Task added to Done");
                     break;
                 default:
