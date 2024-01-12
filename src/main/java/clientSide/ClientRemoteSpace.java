@@ -68,7 +68,7 @@ public class ClientRemoteSpace {
                 moveTask();
                 break;
             case 4:
-                // editTask();
+                editTask();
                 break;
             case 5:
                 mainScreen();
@@ -219,6 +219,44 @@ public class ClientRemoteSpace {
                     System.out.println("Task moved successfully");
                 } else {
                     System.out.println("Task not found in the specified column. Move operation cancelled.");
+                }
+            } else {
+                System.out.println("Invalid column choice");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void editTask() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Choose the column of the task you want to edit:");
+        System.out.println("1. Backlog");
+        System.out.println("2. Doing");
+        System.out.println("3. Review");
+        System.out.println("4. Done");
+
+        int columnChoice = input.nextInt();
+        input.nextLine();
+
+        System.out.println("Please enter the name of the task to edit:");
+        String taskName = input.nextLine();
+
+        try {
+            RemoteSpace space = getSpaceFromChoice(columnChoice);
+
+            if (space != null) {
+                Object[] task = space.getp(new ActualField(taskName));
+
+                if (task != null) {
+                    System.out.println("Enter the new name for the task:");
+                    String newTaskName = input.nextLine();
+
+                    space.put(newTaskName);
+                    System.out.println("Task edited successfully");
+                } else {
+                    System.out.println("Task not found in the specified column. Edit operation cancelled.");
                 }
             } else {
                 System.out.println("Invalid column choice");
