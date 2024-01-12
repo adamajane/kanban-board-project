@@ -20,6 +20,7 @@ public class ServerRemoteSpace {
 
     public static void main(String[] args) throws InterruptedException {
 
+        Object[] request;
         Object[] arguments;
         String columnName;
         String function;
@@ -65,20 +66,23 @@ public class ServerRemoteSpace {
 
         // Keep serving requests to enter chatrooms
         while (true) {
-            System.out.println("here1");
-            Object[] request = requests.get(new FormalField(String.class), new ActualField(String.class), new FormalField(String.class));
-            System.out.println("here2");
-            List<Object[]> taskList = requests.getAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
-            for (Object[] obj : taskList) {
-                String data = (String) obj[0];
-                System.out.println(data);
-            }
+//            System.out.println("here1");
+            request = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+//            System.out.println(request[0] + " " + request[1] + " " + request[2]);
+//            List<Object[]> taskList = requests.getAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+//            for (Object[] obj : taskList) {
+//                String data = (String) obj[0];
+//                System.out.println(data);
+//            }
 
             function = (String) request[0];
             columnName = (String) request[1];
+            requests.put(function, columnName, (String) request[2]);
+
             switch (function) {
                 case "add":
-                    arguments = requests.get(new ActualField(String.class), new ActualField(String.class), new FormalField(String.class));
+                    System.out.println("in add");
+                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     System.out.println("add");
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println("adding to " + arguments[2] + " backlog");

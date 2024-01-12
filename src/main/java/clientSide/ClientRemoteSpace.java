@@ -25,12 +25,12 @@ public class ClientRemoteSpace {
         RemoteSpace requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
 
         // for testing rpc
-        requests.put("add", "backlog", "taskname");
-        List<Object[]> taskList = requests.queryAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
-        for (Object[] obj : taskList) {
-            String data = (String) obj[0] + " " + (String) obj[1] + " " + (String) obj[2];
-            System.out.println(data);
-        }
+//        requests.put("add", "backlog", "taskname");
+//        List<Object[]> taskList = requests.queryAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+//        for (Object[] obj : taskList) {
+//            String data = (String) obj[0] + " " + (String) obj[1] + " " + (String) obj[2];
+//            System.out.println(data);
+//        }
 
         welcomeScreen(requests);
         //backlog.put("Tuple 1");
@@ -128,19 +128,19 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
-                    requests.put("add", columnChoice, taskName);
+                    requests.put("add", "backlog", taskName);
                     System.out.println("Task added to Backlog");
                     break;
                 case 2:
-                    requests.put("add", columnChoice, taskName);
+                    requests.put("add", "doing", taskName);
                     System.out.println("Task added to Doing");
                     break;
                 case 3:
-                    requests.put("add", columnChoice, taskName);
+                    requests.put("add", "review", taskName);
                     System.out.println("Task added to Review");
                     break;
                 case 4:
-                    requests.put("add", columnChoice, taskName);
+                    requests.put("add", "done", taskName);
                     System.out.println("Task added to Done");
                     break;
                 default:
