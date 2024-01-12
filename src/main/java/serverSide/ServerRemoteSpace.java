@@ -98,25 +98,27 @@ public class ServerRemoteSpace {
                         System.out.println("adding to " + arguments[2] + " done");
                         done.getColumnSpace().put((String) arguments[2]);
                     }
+                    break;
                 case "remove":
                     arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     String removeArgument = (String) arguments[2];
                     if (Objects.equals(columnName, "backlog")) {
-                        System.out.println("adding to " + arguments[2] + " backlog");
+                        System.out.println("removing " + arguments[2] + " from backlog");
                         backlog.getColumnSpace().get(new ActualField(removeArgument));
                     }
                     if (Objects.equals(columnName, "doing")) {
-                        System.out.println("adding to " + arguments[2] + " doing");
+                        System.out.println("removing " + arguments[2] + " from doing");
                         doing.getColumnSpace().get(new ActualField(removeArgument));
                     }
                     if (Objects.equals(columnName, "review")) {
-                        System.out.println("adding to " + arguments[2] + " review");
+                        System.out.println("removing " + arguments[2] + " from review");
                         review.getColumnSpace().get(new ActualField(removeArgument));
                     }
                     if (Objects.equals(columnName, "done")) {
-                        System.out.println("adding to " + arguments[2] + " done");
+                        System.out.println("removing to " + arguments[2] + " from done");
                         done.getColumnSpace().get(new ActualField(removeArgument));
                     }
+                    break;
                 default:
                     // ignore RPC for unknown functions
                     continue;
