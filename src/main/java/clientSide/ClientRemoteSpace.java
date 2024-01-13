@@ -3,8 +3,6 @@ package clientSide;
 import org.jspace.*;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
