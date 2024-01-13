@@ -3,6 +3,7 @@ package serverSide;
 import org.jspace.*;
 
 import java.util.Objects;
+
 import static util.Config.IP_ADDRESS;
 
 public class ServerRemoteSpace {
@@ -81,24 +82,21 @@ public class ServerRemoteSpace {
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println(arguments[3] + " added " + arguments[2] + " to backlog");
                         backlog.getColumnSpace().put((String) arguments[2]);
-                        responses.put((String) clientName,"ok");
-                    }
-                    else if (Objects.equals(columnName, "doing")) {
+                        responses.put((String) clientName, "ok");
+                    } else if (Objects.equals(columnName, "doing")) {
                         System.out.println(arguments[3] + " added " + arguments[2] + " to doing");
                         doing.getColumnSpace().put((String) arguments[2]);
-                        responses.put((String) clientName,"ok");
-                    }
-                    else if (Objects.equals(columnName, "review")) {
+                        responses.put((String) clientName, "ok");
+                    } else if (Objects.equals(columnName, "review")) {
                         System.out.println(arguments[3] + " added " + arguments[2] + " to review");
                         review.getColumnSpace().put((String) arguments[2]);
-                        responses.put((String) clientName,"ok");
-                    }
-                    else if (Objects.equals(columnName, "done")) {
+                        responses.put((String) clientName, "ok");
+                    } else if (Objects.equals(columnName, "done")) {
                         System.out.println(arguments[3] + " added " + arguments[2] + " to done");
                         done.getColumnSpace().put((String) arguments[2]);
-                        responses.put((String) clientName,"ok");
+                        responses.put((String) clientName, "ok");
                     } else {
-                        responses.put((String) clientName,"ko");
+                        responses.put((String) clientName, "ko");
                     }
                     break;
                 case "remove":
@@ -107,24 +105,20 @@ public class ServerRemoteSpace {
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println(arguments[3] + " removed " + arguments[2] + " from backlog");
                         backlog.getColumnSpace().get(new ActualField(removeArgument));
-                        responses.put((String) clientName,"ok");
-                    }
-                    else if (Objects.equals(columnName, "doing")) {
+                        responses.put((String) clientName, "ok");
+                    } else if (Objects.equals(columnName, "doing")) {
                         System.out.println(arguments[3] + " removed " + arguments[2] + " from doing");
                         doing.getColumnSpace().get(new ActualField(removeArgument));
-                        responses.put((String) clientName,"ok");
-                    }
-                    else if (Objects.equals(columnName, "review")) {
+                        responses.put((String) clientName, "ok");
+                    } else if (Objects.equals(columnName, "review")) {
                         System.out.println(arguments[3] + " removed " + arguments[2] + " from review");
                         review.getColumnSpace().get(new ActualField(removeArgument));
-                        responses.put((String) clientName,"ok");
-                    }
-                    else if (Objects.equals(columnName, "done")) {
+                        responses.put((String) clientName, "ok");
+                    } else if (Objects.equals(columnName, "done")) {
                         System.out.println(arguments[3] + " removed " + arguments[2] + " from done");
                         done.getColumnSpace().get(new ActualField(removeArgument));
-                        responses.put((String) clientName,"ok");
-                    }
-                    else {
+                        responses.put((String) clientName, "ok");
+                    } else {
                         responses.put((String) clientName, "ko");
                     }
                     break;
@@ -140,6 +134,22 @@ public class ServerRemoteSpace {
                         toSpace.put(moveArgument);
                         responses.put((String) clientName, "ok");
                         System.out.println("Moved " + moveArgument + " from column number " + fromColumn + " to column number " + toColumn);
+                    } else {
+                        responses.put((String) clientName, "ko");
+                    }
+                    break;
+                case "edit":
+                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+                    columnName = (String) arguments[1];
+                    String oldTaskName = (String) arguments[2];
+                    String newTaskName = (String) arguments[4];
+                    Space editSpace = getSpaceFromChoice(columnName);
+
+                    if (editSpace != null) {
+                        editSpace.get(new ActualField(oldTaskName));
+                        editSpace.put(newTaskName);
+                        responses.put((String) clientName, "ok");
+                        System.out.println("Edited task " + oldTaskName + " to " + newTaskName + " in column " + columnName);
                     } else {
                         responses.put((String) clientName, "ko");
                     }

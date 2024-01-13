@@ -90,7 +90,7 @@ public class ClientRemoteSpace {
                 moveTask();
                 break;
             case 4:
-                // editTask();
+                editTask();
                 break;
             case 5:
                 update();
@@ -242,6 +242,30 @@ public class ClientRemoteSpace {
         refreshTaskLists();
     }
 
+    public static void editTask() throws InterruptedException {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Choose the column of the task you want to edit:");
+        System.out.println("1. Backlog");
+        System.out.println("2. Doing");
+        System.out.println("3. Review");
+        System.out.println("4. Done");
+
+        int columnChoice = input.nextInt();
+        input.nextLine(); // Consume the newline
+
+        System.out.println("Please enter the name of the task to edit:");
+        String taskName = input.nextLine();
+
+        System.out.println("Enter the new name for the task:");
+        String newTaskName = input.nextLine();
+
+        String columnString = Integer.toString(columnChoice);
+        requests.put("edit", columnString, taskName, clientName, newTaskName);
+
+        System.out.println("Task " + taskName + " edited in " + columnString);
+        refreshTaskLists();
+    }
 
     private static RemoteSpace getSpaceFromChoice(int choice) {
         switch (choice) {
