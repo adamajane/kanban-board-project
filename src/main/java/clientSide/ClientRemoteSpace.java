@@ -222,7 +222,7 @@ public class ClientRemoteSpace {
         System.out.println("4. Done");
 
         int fromColumnChoice = input.nextInt();
-        input.nextLine();
+        input.nextLine(); // Consume the newline
 
         System.out.println("Choose the column you want to move the task to:");
         System.out.println("1. Backlog");
@@ -231,27 +231,17 @@ public class ClientRemoteSpace {
         System.out.println("4. Done");
 
         int toColumnChoice = input.nextInt();
-        input.nextLine();
+        input.nextLine(); // Consume the newline
 
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
 
-        try {
-            RemoteSpace fromSpace = getSpaceFromChoice(fromColumnChoice);
-            RemoteSpace toSpace = getSpaceFromChoice(toColumnChoice);
+        requests.put("move", fromColumnChoice, toColumnChoice, taskName, clientName);
 
-            if (fromSpace != null && toSpace != null) {
-                fromSpace.getp(new ActualField(taskName));
-                toSpace.put(taskName);
-                System.out.println("Task moved successfully");
-            } else {
-                System.out.println("Invalid column choice");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Task moved from " + fromColumnChoice + " to " + toColumnChoice);
         refreshTaskLists();
     }
+
 
     private static RemoteSpace getSpaceFromChoice(int choice) {
         switch (choice) {

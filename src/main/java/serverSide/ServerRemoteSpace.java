@@ -25,6 +25,7 @@ public class ServerRemoteSpace {
         String columnName;
         String function;
         String clientName;
+        String taskName;
 
         int port = 8080;
         String uri = "tcp://" + IP_ADDRESS + ":" + port + "/?keep";
@@ -72,8 +73,9 @@ public class ServerRemoteSpace {
             request = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
             function = (String) request[0];
             columnName = (String) request[1];
+            taskName = (String) request[2];
             clientName = (String) request[3];
-            requests.put(function, columnName, (String) request[2], clientName);
+            requests.put(function, columnName, taskName, clientName);
 
             switch (function) {
                 case "add":
@@ -128,10 +130,40 @@ public class ServerRemoteSpace {
                         responses.put((String) clientName, "ko");
                     }
                     break;
+                case "move":
+                    arguments = requests.get(new FormalField(String.class), new FormalField(Integer.class), new FormalField(Integer.class), new FormalField(String.class), new FormalField(String.class));
+                    int fromColumn = (Integer) arguments[1];
+                    int toColumn = (Integer) arguments[2];
+                    Space fromSpace = getSpaceFromChoice(fromColumn);
+                    Space toSpace = getSpaceFromChoice(toColumn);
+
+                    if (fromSpace != null && toSpace != null) {
+                        fromSpace.get(new ActualField((String) arguments[2]));
+                        toSpace.put((String) arguments[2]);
+                        responses.put((String) clientName, "ok");
+                    } else {
+                        responses.put((String) clientName, "ko");
+                    }
+                    break;
                 default:
                     // ignore RPC for unknown functions
                     continue;
             }
+        }
+    }
+
+    private static Space getSpaceFromChoice(int choice) {
+        switch (choice) {
+            case 1:
+                return backlog.getColumnSpace();
+            case 2:
+                return doing.getColumnSpace();
+            case 3:
+                return review.getColumnSpace();
+            case 4:
+                return done.getColumnSpace();
+            default:
+                return null;
         }
     }
 }
