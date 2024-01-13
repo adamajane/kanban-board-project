@@ -3,8 +3,8 @@ package clientSide;
 import org.jspace.*;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static util.Config.IP_ADDRESS;
@@ -15,6 +15,11 @@ public class ClientRemoteSpace {
     static RemoteSpace doing;
     static RemoteSpace review;
     static RemoteSpace done;
+    static RemoteSpace requests;
+    static RemoteSpace responses;
+    static RemoteSpace clients;
+    static String clientName;
+
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -22,19 +27,30 @@ public class ClientRemoteSpace {
         doing = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/doing?keep");
         review = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/review?keep");
         done = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/done?keep");
-        welcomeScreen();
+        requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
+        responses = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/responses?keep");
 
+        // for testing rpc
+//        requests.put("add", "backlog", "taskname");
+//        List<Object[]> taskList = requests.queryAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+//        for (Object[] obj : taskList) {
+//            String data = (String) obj[0] + " " + (String) obj[1] + " " + (String) obj[2];
+//            System.out.println(data);
+//        }
+
+        welcomeScreen();
     }
 
     public static void welcomeScreen() throws InterruptedException {
+        Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to KanPlan!");
         System.out.println(" ");
-        while (true) {
-            mainScreen();
-        }
-    }
+        System.out.println("Insert your name here:");
+        clientName = scan.nextLine();
+        System.out.println(" ");
+        System.out.println("Connected as: " + clientName);
+        System.out.println(" ");
 
-    public static void mainScreen() throws InterruptedException {
         printSpaceTasks(backlog, "Backlog");
         System.out.println(" ");
         printSpaceTasks(doing, "Doing");
@@ -44,6 +60,12 @@ public class ClientRemoteSpace {
         printSpaceTasks(done, "Done");
         System.out.println(" ");
 
+        while (true) {
+            mainScreen();
+        }
+    }
+
+    public static void mainScreen() throws InterruptedException {
 
         System.out.println(" ");
         System.out.println("Please select an option:");
@@ -71,7 +93,7 @@ public class ClientRemoteSpace {
                 editTask();
                 break;
             case 5:
-                mainScreen();
+                update();
                 break;
             case 6:
                 System.exit(0);
@@ -96,7 +118,7 @@ public class ClientRemoteSpace {
     }
 
 
-    public static void addTask() {
+    public static void addTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to add the task to:");
@@ -111,22 +133,23 @@ public class ClientRemoteSpace {
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
 
+
         try {
             switch (columnChoice) {
                 case 1:
-                    backlog.put(taskName);
+                    requests.put("add", "backlog", taskName, clientName, "");
                     System.out.println("Task added to Backlog");
                     break;
                 case 2:
-                    doing.put(taskName);
+                    requests.put("add", "doing", taskName, clientName, "");
                     System.out.println("Task added to Doing");
                     break;
                 case 3:
-                    review.put(taskName);
+                    requests.put("add", "review", taskName, clientName, "");
                     System.out.println("Task added to Review");
                     break;
                 case 4:
-                    done.put(taskName);
+                    requests.put("add", "done", taskName, clientName, "");
                     System.out.println("Task added to Done");
                     break;
                 default:
@@ -136,9 +159,11 @@ public class ClientRemoteSpace {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        refreshTaskLists();
+
     }
 
-    public static void removeTask() {
+    public static void removeTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to remove the task from:");
@@ -156,19 +181,23 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
-                    backlog.getp(new ActualField(taskName));
+                    requests.put("remove", "backlog", taskName, clientName, "");
+//                    backlog.getp(new ActualField(taskName));
                     System.out.println("Task removed from Backlog");
                     break;
                 case 2:
-                    doing.get(new ActualField(taskName));
+                    requests.put("remove", "doing", taskName, clientName, "");
+//                    doing.get(new ActualField(taskName));
                     System.out.println("Task removed from Doing");
                     break;
                 case 3:
-                    review.get(new ActualField(taskName));
+                    requests.put("remove", "review", taskName, clientName, "");
+//                    review.get(new ActualField(taskName));
                     System.out.println("Task removed from Review");
                     break;
                 case 4:
-                    done.get(new ActualField(taskName));
+                    requests.put("remove", "done", taskName, clientName, "");
+//                    done.get(new ActualField(taskName));
                     System.out.println("Task removed from Done");
                     break;
                 default:
@@ -178,9 +207,10 @@ public class ClientRemoteSpace {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        refreshTaskLists();
     }
 
-    public static void moveTask() {
+    public static void moveTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to move the task from:");
@@ -190,7 +220,7 @@ public class ClientRemoteSpace {
         System.out.println("4. Done");
 
         int fromColumnChoice = input.nextInt();
-        input.nextLine();
+        input.nextLine(); // Consume the newline
 
         System.out.println("Choose the column you want to move the task to:");
         System.out.println("1. Backlog");
@@ -199,36 +229,20 @@ public class ClientRemoteSpace {
         System.out.println("4. Done");
 
         int toColumnChoice = input.nextInt();
-        input.nextLine();
+        input.nextLine(); // Consume the newline
 
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
+        String fromColumnString = Integer.toString(fromColumnChoice);
+        String toColumnString = Integer.toString(toColumnChoice);
 
-        try {
-            RemoteSpace fromSpace = getSpaceFromChoice(fromColumnChoice);
-            RemoteSpace toSpace = getSpaceFromChoice(toColumnChoice);
+        requests.put("move", fromColumnString, taskName, clientName, toColumnString);
 
-            if (fromSpace != null && toSpace != null) {
-                // Attempt to retrieve the task from the source column
-                Object[] task = fromSpace.getp(new ActualField(taskName));
-
-                // Check if the task was successfully retrieved
-                if (task != null) {
-                    // Move the task to the target column
-                    toSpace.put(taskName);
-                    System.out.println("Task moved successfully");
-                } else {
-                    System.out.println("Task not found in the specified column. Move operation cancelled.");
-                }
-            } else {
-                System.out.println("Invalid column choice");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Task moved from " + fromColumnChoice + " to " + toColumnChoice);
+        refreshTaskLists();
     }
 
-    public static void editTask() {
+    public static void editTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column of the task you want to edit:");
@@ -238,34 +252,20 @@ public class ClientRemoteSpace {
         System.out.println("4. Done");
 
         int columnChoice = input.nextInt();
-        input.nextLine();
+        input.nextLine(); // Consume the newline
 
         System.out.println("Please enter the name of the task to edit:");
         String taskName = input.nextLine();
 
-        try {
-            RemoteSpace space = getSpaceFromChoice(columnChoice);
+        System.out.println("Enter the new name for the task:");
+        String newTaskName = input.nextLine();
 
-            if (space != null) {
-                Object[] task = space.getp(new ActualField(taskName));
+        String columnString = Integer.toString(columnChoice);
+        requests.put("edit", columnString, taskName, clientName, newTaskName);
 
-                if (task != null) {
-                    System.out.println("Enter the new name for the task:");
-                    String newTaskName = input.nextLine();
-
-                    space.put(newTaskName);
-                    System.out.println("Task edited successfully");
-                } else {
-                    System.out.println("Task not found in the specified column. Edit operation cancelled.");
-                }
-            } else {
-                System.out.println("Invalid column choice");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Task " + taskName + " edited in " + columnString);
+        refreshTaskLists();
     }
-
 
     private static RemoteSpace getSpaceFromChoice(int choice) {
         switch (choice) {
@@ -280,6 +280,36 @@ public class ClientRemoteSpace {
             default:
                 return null;
         }
+    }
+
+    public static void refreshTaskLists() throws InterruptedException {
+        Object[] response = responses.get(new ActualField(clientName), new FormalField(String.class));
+        String responseString = (String) response[1];
+        if (Objects.equals(responseString, "ok")) {
+            System.out.println("\n\n\n\n");
+            printSpaceTasks(backlog, "Backlog");
+            System.out.println(" ");
+            printSpaceTasks(doing, "Doing");
+            System.out.println(" ");
+            printSpaceTasks(review, "Review");
+            System.out.println(" ");
+            printSpaceTasks(done, "Done");
+            System.out.println(" ");
+        } else {
+            System.out.println("Server: bad response");
+        }
+    }
+
+    public static void update() throws InterruptedException {
+        System.out.println("\n\n\n\n");
+        printSpaceTasks(backlog, "Backlog");
+        System.out.println(" ");
+        printSpaceTasks(doing, "Doing");
+        System.out.println(" ");
+        printSpaceTasks(review, "Review");
+        System.out.println(" ");
+        printSpaceTasks(done, "Done");
+        System.out.println(" ");
     }
 
 
