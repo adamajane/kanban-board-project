@@ -41,10 +41,6 @@ public class ClientRemoteSpace {
 //        }
 
         welcomeScreen();
-        //backlog.put("Tuple 1");
-        //doing.put("Tuple 2");
-        //review.put("Tuple 3");
-        //done.put("Tuple 4");
     }
 
     public static void welcomeScreen() throws InterruptedException {
@@ -57,12 +53,6 @@ public class ClientRemoteSpace {
         System.out.println("Connected as: " + clientName);
         System.out.println(" ");
 
-        while (true) {
-            mainScreen();
-        }
-    }
-
-    public static void mainScreen() throws InterruptedException {
         printSpaceTasks(backlog, "Backlog");
         System.out.println(" ");
         printSpaceTasks(doing, "Doing");
@@ -72,6 +62,12 @@ public class ClientRemoteSpace {
         printSpaceTasks(done, "Done");
         System.out.println(" ");
 
+        while (true) {
+            mainScreen();
+        }
+    }
+
+    public static void mainScreen() throws InterruptedException {
 
         System.out.println(" ");
         System.out.println("Please select an option:");
@@ -99,7 +95,7 @@ public class ClientRemoteSpace {
                 // editTask();
                 break;
             case 5:
-                mainScreen();
+                refreshTaskLists();
                 break;
             case 6:
                 System.exit(0);
@@ -169,7 +165,7 @@ public class ClientRemoteSpace {
 
     }
 
-    public static void removeTask() {
+    public static void removeTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to remove the task from:");
@@ -213,9 +209,10 @@ public class ClientRemoteSpace {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        refreshTaskLists();
     }
 
-    public static void moveTask() {
+    public static void moveTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Choose the column you want to move the task from:");
@@ -253,6 +250,7 @@ public class ClientRemoteSpace {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        refreshTaskLists();
     }
 
     private static RemoteSpace getSpaceFromChoice(int choice) {
@@ -276,9 +274,13 @@ public class ClientRemoteSpace {
         if (Objects.equals(responseString, "ok")) {
             System.out.println("\n\n\n\n");
             printSpaceTasks(backlog, "Backlog");
+            System.out.println(" ");
             printSpaceTasks(doing, "Doing");
+            System.out.println(" ");
             printSpaceTasks(review, "Review");
+            System.out.println(" ");
             printSpaceTasks(done, "Done");
+            System.out.println(" ");
         } else {
             System.out.println("Server: bad response");
         }
