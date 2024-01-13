@@ -26,6 +26,7 @@ public class ServerRemoteSpace {
         String function;
         String clientName;
         String taskName;
+        String toColumn;
 
         int port = 8080;
         String uri = "tcp://" + IP_ADDRESS + ":" + port + "/?keep";
@@ -70,16 +71,17 @@ public class ServerRemoteSpace {
 
         while (true) {
 //            System.out.println("here1");
-            request = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+            request = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
             function = (String) request[0];
             columnName = (String) request[1];
             taskName = (String) request[2];
             clientName = (String) request[3];
-            requests.put(function, columnName, taskName, clientName);
+            toColumn = (String) request[4];
+            requests.put(function, columnName, taskName, clientName, toColumn);
 
             switch (function) {
                 case "add":
-                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println(arguments[3] + " added " + arguments[2] + " to backlog");
                         backlog.getColumnSpace().put((String) arguments[2]);
@@ -104,7 +106,7 @@ public class ServerRemoteSpace {
                     }
                     break;
                 case "remove":
-                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                     String removeArgument = (String) arguments[2];
                     if (Objects.equals(columnName, "backlog")) {
                         System.out.println(arguments[3] + " removed " + arguments[2] + " from backlog");
@@ -131,16 +133,17 @@ public class ServerRemoteSpace {
                     }
                     break;
                 case "move":
-                    arguments = requests.get(new FormalField(String.class), new FormalField(Integer.class), new FormalField(Integer.class), new FormalField(String.class), new FormalField(String.class));
-                    int fromColumn = (Integer) arguments[1];
-                    int toColumn = (Integer) arguments[2];
+                    arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
+                    String fromColumn = (String) arguments[1];
+                    toColumn = (String) arguments[4];
                     Space fromSpace = getSpaceFromChoice(fromColumn);
                     Space toSpace = getSpaceFromChoice(toColumn);
-
+                    String moveArgument = (String) arguments[2];
                     if (fromSpace != null && toSpace != null) {
-                        fromSpace.get(new ActualField((String) arguments[2]));
-                        toSpace.put((String) arguments[2]);
+                        fromSpace.get(new ActualField(moveArgument));
+                        toSpace.put(moveArgument);
                         responses.put((String) clientName, "ok");
+                        System.out.println("Moved " + moveArgument + " from column number " + fromColumn + " to column number " + toColumn);
                     } else {
                         responses.put((String) clientName, "ko");
                     }
@@ -152,15 +155,15 @@ public class ServerRemoteSpace {
         }
     }
 
-    private static Space getSpaceFromChoice(int choice) {
+    private static Space getSpaceFromChoice(String choice) {
         switch (choice) {
-            case 1:
+            case "1":
                 return backlog.getColumnSpace();
-            case 2:
+            case "2":
                 return doing.getColumnSpace();
-            case 3:
+            case "3":
                 return review.getColumnSpace();
-            case 4:
+            case "4":
                 return done.getColumnSpace();
             default:
                 return null;

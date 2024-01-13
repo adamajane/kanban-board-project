@@ -139,19 +139,19 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
-                    requests.put("add", "backlog", taskName, clientName);
+                    requests.put("add", "backlog", taskName, clientName, "");
                     System.out.println("Task added to Backlog");
                     break;
                 case 2:
-                    requests.put("add", "doing", taskName, clientName);
+                    requests.put("add", "doing", taskName, clientName, "");
                     System.out.println("Task added to Doing");
                     break;
                 case 3:
-                    requests.put("add", "review", taskName, clientName);
+                    requests.put("add", "review", taskName, clientName, "");
                     System.out.println("Task added to Review");
                     break;
                 case 4:
-                    requests.put("add", "done", taskName, clientName);
+                    requests.put("add", "done", taskName, clientName, "");
                     System.out.println("Task added to Done");
                     break;
                 default:
@@ -183,22 +183,22 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
-                    requests.put("remove", "backlog", taskName, clientName);
+                    requests.put("remove", "backlog", taskName, clientName, "");
 //                    backlog.getp(new ActualField(taskName));
                     System.out.println("Task removed from Backlog");
                     break;
                 case 2:
-                    requests.put("remove", "doing", taskName, clientName);
+                    requests.put("remove", "doing", taskName, clientName, "");
 //                    doing.get(new ActualField(taskName));
                     System.out.println("Task removed from Doing");
                     break;
                 case 3:
-                    requests.put("remove", "review", taskName, clientName);
+                    requests.put("remove", "review", taskName, clientName, "");
 //                    review.get(new ActualField(taskName));
                     System.out.println("Task removed from Review");
                     break;
                 case 4:
-                    requests.put("remove", "done", taskName, clientName);
+                    requests.put("remove", "done", taskName, clientName, "");
 //                    done.get(new ActualField(taskName));
                     System.out.println("Task removed from Done");
                     break;
@@ -235,8 +235,10 @@ public class ClientRemoteSpace {
 
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
+        String fromColumnString = Integer.toString(fromColumnChoice);
+        String toColumnString = Integer.toString(toColumnChoice);
 
-        requests.put("move", fromColumnChoice, toColumnChoice, taskName, clientName);
+        requests.put("move", fromColumnString, taskName, clientName, toColumnString);
 
         System.out.println("Task moved from " + fromColumnChoice + " to " + toColumnChoice);
         refreshTaskLists();
