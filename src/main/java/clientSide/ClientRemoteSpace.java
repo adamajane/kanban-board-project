@@ -95,7 +95,7 @@ public class ClientRemoteSpace {
                 // editTask();
                 break;
             case 5:
-                refreshTaskLists();
+                update();
                 break;
             case 6:
                 System.exit(0);
@@ -276,6 +276,18 @@ public class ClientRemoteSpace {
         } else {
             System.out.println("Server: bad response");
         }
+    }
+
+    public static void update() throws InterruptedException {
+        System.out.println("\n\n\n\n");
+        printSpaceTasks(backlog, "Backlog");
+        System.out.println(" ");
+        printSpaceTasks(doing, "Doing");
+        System.out.println(" ");
+        printSpaceTasks(review, "Review");
+        System.out.println(" ");
+        printSpaceTasks(done, "Done");
+        System.out.println(" ");
     }
 
 
