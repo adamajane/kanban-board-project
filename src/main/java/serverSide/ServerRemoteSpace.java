@@ -2,11 +2,7 @@ package serverSide;
 
 import org.jspace.*;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
-
 import static util.Config.IP_ADDRESS;
 
 public class ServerRemoteSpace {
