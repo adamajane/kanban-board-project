@@ -54,19 +54,19 @@ public class ServerRemoteSpace implements Runnable {
                     case "add":
                         arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                         if (Objects.equals(columnName, "backlog")) {
-                            System.out.println(arguments[3] + " added " + arguments[2] + " to backlog");
+                            System.out.println(arguments[3] + " added " + arguments[2] + " to Backlog");
                             backlog.getColumnSpace().put((String) arguments[2]);
                             responses.put((String) clientName, "ok");
                         } else if (Objects.equals(columnName, "doing")) {
-                            System.out.println(arguments[3] + " added " + arguments[2] + " to doing");
+                            System.out.println(arguments[3] + " added " + arguments[2] + " to Doing");
                             doing.getColumnSpace().put((String) arguments[2]);
                             responses.put((String) clientName, "ok");
                         } else if (Objects.equals(columnName, "review")) {
-                            System.out.println(arguments[3] + " added " + arguments[2] + " to review");
+                            System.out.println(arguments[3] + " added " + arguments[2] + " to Review");
                             review.getColumnSpace().put((String) arguments[2]);
                             responses.put((String) clientName, "ok");
                         } else if (Objects.equals(columnName, "done")) {
-                            System.out.println(arguments[3] + " added " + arguments[2] + " to done");
+                            System.out.println(arguments[3] + " added " + arguments[2] + " to Done");
                             done.getColumnSpace().put((String) arguments[2]);
                             responses.put((String) clientName, "ok");
                         } else {
@@ -77,19 +77,19 @@ public class ServerRemoteSpace implements Runnable {
                         arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                         String removeArgument = (String) arguments[2];
                         if (Objects.equals(columnName, "backlog")) {
-                            System.out.println(arguments[3] + " removed " + arguments[2] + " from backlog");
+                            System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
                             backlog.getColumnSpace().get(new ActualField(removeArgument));
                             responses.put((String) clientName, "ok");
                         } else if (Objects.equals(columnName, "doing")) {
-                            System.out.println(arguments[3] + " removed " + arguments[2] + " from doing");
+                            System.out.println(arguments[3] + " removed " + arguments[2] + " from Doing");
                             doing.getColumnSpace().get(new ActualField(removeArgument));
                             responses.put((String) clientName, "ok");
                         } else if (Objects.equals(columnName, "review")) {
-                            System.out.println(arguments[3] + " removed " + arguments[2] + " from review");
+                            System.out.println(arguments[3] + " removed " + arguments[2] + " from Review");
                             review.getColumnSpace().get(new ActualField(removeArgument));
                             responses.put((String) clientName, "ok");
                         } else if (Objects.equals(columnName, "done")) {
-                            System.out.println(arguments[3] + " removed " + arguments[2] + " from done");
+                            System.out.println(arguments[3] + " removed " + arguments[2] + " from Done");
                             done.getColumnSpace().get(new ActualField(removeArgument));
                             responses.put((String) clientName, "ok");
                         } else {

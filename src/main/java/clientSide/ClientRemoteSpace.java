@@ -3,6 +3,7 @@ package clientSide;
 import org.jspace.*;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -58,18 +59,32 @@ public class ClientRemoteSpace {
     }
 
     public static void mainScreen() throws InterruptedException {
+        Scanner input = new Scanner(System.in);
+        int userOption;
 
-        System.out.println(" ");
-        System.out.println("Please select an option:");
-        System.out.println("1. Add a task");
-        System.out.println("2. Remove a task");
-        System.out.println("3. Move a task");
-        System.out.println("4. Edit a task");
-        System.out.println("5. Update");
-        System.out.println("6. Exit");
-        System.out.println(" ");
-        Scanner scan = new Scanner(System.in);
-        int userOption = scan.nextInt();
+        while (true) {
+            System.out.println(" ");
+            System.out.println("Please select an option:");
+            System.out.println("1. Add a task");
+            System.out.println("2. Remove a task");
+            System.out.println("3. Move a task");
+            System.out.println("4. Edit a task");
+            System.out.println("5. Update");
+            System.out.println("6. Exit");
+            System.out.println(" ");
+            try {
+                userOption = input.nextInt();
+                input.nextLine(); // This captures the newline after the integer input
+                if (userOption < 1 || userOption > 6) {
+                    System.out.println("Invalid option. Please enter a number between 1 and 6.");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid input! Please enter an integer number.");
+                input.nextLine(); // Clears the buffer
+            }
+        }
 
         switch (userOption) {
             case 1:
@@ -112,15 +127,23 @@ public class ClientRemoteSpace {
 
     public static void addTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
-
-        System.out.println("Choose the column you want to add the task to:");
-        System.out.println("1. Backlog");
-        System.out.println("2. Doing");
-        System.out.println("3. Review");
-        System.out.println("4. Done");
-
-        int columnChoice = input.nextInt(); // TODO: Fix InputMismatchException here
-        input.nextLine(); // This is necessary to consume the newline after the integer input
+        int columnChoice;
+        while (true) {
+            System.out.println("Choose the column you want to add the task to:");
+            uiColumnsChoice();
+            try {
+                columnChoice = input.nextInt();
+                input.nextLine();
+                if (columnChoice < 1 || columnChoice > 4) {
+                    System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                input.nextLine();
+            }
+        }
 
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
@@ -157,15 +180,23 @@ public class ClientRemoteSpace {
 
     public static void removeTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
-
-        System.out.println("Choose the column you want to remove the task from:");
-        System.out.println("1. Backlog");
-        System.out.println("2. Doing");
-        System.out.println("3. Review");
-        System.out.println("4. Done");
-
-        int columnChoice = input.nextInt();
-        input.nextLine();
+        int columnChoice;
+        while (true) {
+            System.out.println("Choose the column you want to remove the task to:");
+            uiColumnsChoice();
+            try {
+                columnChoice = input.nextInt();
+                input.nextLine();
+                if (columnChoice < 1 || columnChoice > 4) {
+                    System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                input.nextLine();
+            }
+        }
 
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
@@ -174,22 +205,18 @@ public class ClientRemoteSpace {
             switch (columnChoice) {
                 case 1:
                     requests.put("remove", "backlog", taskName, clientName, "");
-//                    backlog.getp(new ActualField(taskName));
                     System.out.println("Task removed from Backlog");
                     break;
                 case 2:
                     requests.put("remove", "doing", taskName, clientName, "");
-//                    doing.get(new ActualField(taskName));
                     System.out.println("Task removed from Doing");
                     break;
                 case 3:
                     requests.put("remove", "review", taskName, clientName, "");
-//                    review.get(new ActualField(taskName));
                     System.out.println("Task removed from Review");
                     break;
                 case 4:
                     requests.put("remove", "done", taskName, clientName, "");
-//                    done.get(new ActualField(taskName));
                     System.out.println("Task removed from Done");
                     break;
                 default:
@@ -204,24 +231,41 @@ public class ClientRemoteSpace {
 
     public static void moveTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
+        int fromColumnChoice;
+        while (true) {
+            System.out.println("Choose the column you want to move the task from:");
+            uiColumnsChoice();
+            try {
+                fromColumnChoice = input.nextInt();
+                input.nextLine();
+                if (fromColumnChoice < 1 || fromColumnChoice > 4) {
+                    System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                input.nextLine();
+            }
+        }
 
-        System.out.println("Choose the column you want to move the task from:");
-        System.out.println("1. Backlog");
-        System.out.println("2. Doing");
-        System.out.println("3. Review");
-        System.out.println("4. Done");
-
-        int fromColumnChoice = input.nextInt();
-        input.nextLine(); // Consume the newline
-
-        System.out.println("Choose the column you want to move the task to:");
-        System.out.println("1. Backlog");
-        System.out.println("2. Doing");
-        System.out.println("3. Review");
-        System.out.println("4. Done");
-
-        int toColumnChoice = input.nextInt();
-        input.nextLine(); // Consume the newline
+        int toColumnChoice;
+        while (true) {
+            System.out.println("Choose the column you want to move the task to:");
+            uiColumnsChoice();
+            try {
+                toColumnChoice = input.nextInt();
+                input.nextLine();
+                if (toColumnChoice < 1 || toColumnChoice > 4) {
+                    System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                input.nextLine();
+            }
+        }
 
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
@@ -236,15 +280,23 @@ public class ClientRemoteSpace {
 
     public static void editTask() throws InterruptedException {
         Scanner input = new Scanner(System.in);
-
-        System.out.println("Choose the column of the task you want to edit:");
-        System.out.println("1. Backlog");
-        System.out.println("2. Doing");
-        System.out.println("3. Review");
-        System.out.println("4. Done");
-
-        int columnChoice = input.nextInt();
-        input.nextLine(); // Consume the newline
+        int columnChoice;
+        while (true) {
+            System.out.println("Choose the column of the task you want to edit:");
+            uiColumnsChoice();
+            try {
+                columnChoice = input.nextInt();
+                input.nextLine();
+                if (columnChoice < 1 || columnChoice > 4) {
+                    System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                input.nextLine();
+            }
+        }
 
         System.out.println("Please enter the name of the task to edit:");
         String taskName = input.nextLine();
@@ -304,5 +356,10 @@ public class ClientRemoteSpace {
         System.out.println(" ");
     }
 
-
+    public static void uiColumnsChoice() {
+        System.out.println("1. Backlog");
+        System.out.println("2. Doing");
+        System.out.println("3. Review");
+        System.out.println("4. Done");
+    }
 }
