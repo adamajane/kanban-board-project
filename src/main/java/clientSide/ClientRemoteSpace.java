@@ -30,14 +30,6 @@ public class ClientRemoteSpace {
         requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
         responses = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/responses?keep");
 
-        // for testing rpc
-//        requests.put("add", "backlog", "taskname");
-//        List<Object[]> taskList = requests.queryAll(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
-//        for (Object[] obj : taskList) {
-//            String data = (String) obj[0] + " " + (String) obj[1] + " " + (String) obj[2];
-//            System.out.println(data);
-//        }
-
         welcomeScreen();
     }
 
