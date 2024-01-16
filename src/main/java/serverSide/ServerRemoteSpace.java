@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import static util.Config.IP_ADDRESS;
 
-public class ServerRemoteSpace implements Runnable {
+public class ServerRemoteSpace {
 
     static Column backlog = new Column("backlog");
     static Column doing = new Column("doing");
@@ -77,6 +77,15 @@ public class ServerRemoteSpace implements Runnable {
                         arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                         String removeArgument = (String) arguments[2];
                         if (Objects.equals(columnName, "backlog")) {
+                            // TODO: Fix this
+                            if (backlog.getColumnSpace().queryp(new ActualField(removeArgument)) != null) {
+                                System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
+                                backlog.getColumnSpace().get(new ActualField(removeArgument));
+                                responses.put((String) clientName, "ok");
+                            } else {
+                                System.out.println("The task doesn't exit");
+                                responses.put((String) clientName, "ko");
+                            }
                             System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
                             backlog.getColumnSpace().get(new ActualField(removeArgument));
                             responses.put((String) clientName, "ok");
@@ -107,7 +116,7 @@ public class ServerRemoteSpace implements Runnable {
                             fromSpace.get(new ActualField(moveArgument));
                             toSpace.put(moveArgument);
                             responses.put((String) clientName, "ok");
-                            System.out.println("Moved " + moveArgument + " from column number " + fromColumn + " to column number " + toColumn);
+                            System.out.println(arguments[3] + " moved " + moveArgument + " from column number " + fromColumn + " to column number " + toColumn);
                         } else {
                             responses.put((String) clientName, "ko");
                         }

@@ -91,7 +91,7 @@ public class ClientRemoteSpace {
                 addTask();
                 break;
             case 2:
-                removeTask(); // TODO: Can remove tasks. Has to throw exception if no task of that name exists
+                removeTask();
                 break;
             case 3:
                 moveTask();
@@ -204,18 +204,34 @@ public class ClientRemoteSpace {
         try {
             switch (columnChoice) {
                 case 1:
+                    if (backlog.queryp(new ActualField(taskName)) == null) {
+                        System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Backlog");
+                        return;
+                    }
                     requests.put("remove", "backlog", taskName, clientName, "");
                     System.out.println("Task removed from Backlog");
                     break;
                 case 2:
+                    if (doing.queryp(new ActualField(taskName)) == null) {
+                        System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Doing");
+                        return;
+                    }
                     requests.put("remove", "doing", taskName, clientName, "");
                     System.out.println("Task removed from Doing");
                     break;
                 case 3:
+                    if (review.queryp(new ActualField(taskName)) == null) {
+                        System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Review");
+                        return;
+                    }
                     requests.put("remove", "review", taskName, clientName, "");
                     System.out.println("Task removed from Review");
                     break;
                 case 4:
+                    if (done.queryp(new ActualField(taskName)) == null) {
+                        System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Done");
+                        return;
+                    }
                     requests.put("remove", "done", taskName, clientName, "");
                     System.out.println("Task removed from Done");
                     break;
@@ -269,6 +285,37 @@ public class ClientRemoteSpace {
 
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
+
+        switch (fromColumnChoice) {
+            case 1:
+                if (backlog.queryp(new ActualField(taskName)) == null) {
+                    System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Backlog");
+                    return;
+                }
+                break;
+            case 2:
+                if (doing.queryp(new ActualField(taskName)) == null) {
+                    System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Doing");
+                    return;
+                }
+                break;
+            case 3:
+                if (review.queryp(new ActualField(taskName)) == null) {
+                    System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Review");
+                    return;
+                }
+                break;
+            case 4:
+                if (done.queryp(new ActualField(taskName)) == null) {
+                    System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Done");
+                    return;
+                }
+                break;
+            default:
+                System.out.println("Invalid option.");
+                return;
+        }
+
         String fromColumnString = Integer.toString(fromColumnChoice);
         String toColumnString = Integer.toString(toColumnChoice);
 
@@ -300,6 +347,36 @@ public class ClientRemoteSpace {
 
         System.out.println("Please enter the name of the task to edit:");
         String taskName = input.nextLine();
+
+        switch (columnChoice) {
+            case 1:
+                if (backlog.queryp(new ActualField(taskName)) == null) {
+                    System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Backlog");
+                    return;
+                }
+                break;
+            case 2:
+                if (doing.queryp(new ActualField(taskName)) == null) {
+                    System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Doing");
+                    return;
+                }
+                break;
+            case 3:
+                if (review.queryp(new ActualField(taskName)) == null) {
+                    System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Review");
+                    return;
+                }
+                break;
+            case 4:
+                if (done.queryp(new ActualField(taskName)) == null) {
+                    System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Done");
+                    return;
+                }
+                break;
+            default:
+                System.out.println("Invalid option.");
+                return;
+        }
 
         System.out.println("Enter the new name for the task:");
         String newTaskName = input.nextLine();
