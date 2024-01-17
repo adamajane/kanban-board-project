@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import static util.Config.IP_ADDRESS;
 
-public class ServerRemoteSpace {
+public class Server {
 
     static Column backlog = new Column("backlog");
     static Column doing = new Column("doing");

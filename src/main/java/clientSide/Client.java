@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 import static util.Config.IP_ADDRESS;
 
-public class ClientRemoteSpace {
+public class Client {
 
     static RemoteSpace backlog;
     static RemoteSpace doing;
@@ -20,7 +20,7 @@ public class ClientRemoteSpace {
     static String clientName;
 
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public void run() throws InterruptedException, IOException {
 
         backlog = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/backlog?keep");
         doing = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/doing?keep");
