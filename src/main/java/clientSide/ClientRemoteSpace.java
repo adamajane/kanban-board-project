@@ -96,14 +96,14 @@ public class ClientRemoteSpace {
                 removeTask();
                 break;
             case 3:
-                tokenSpace.get(new ActualField("token"));
+//                tokenSpace.get(new ActualField("token"));
                 moveTask();
-                tokenSpace.put("token");
+//                tokenSpace.put("token");
                 break;
             case 4:
-                tokenSpace.get(new ActualField("token"));
+//                tokenSpace.get(new ActualField("token"));
                 editTask();
-                tokenSpace.put("token");
+//                tokenSpace.put("token");
                 break;
             case 5:
                 update();
@@ -326,6 +326,12 @@ public class ClientRemoteSpace {
         String fromColumnString = Integer.toString(fromColumnChoice);
         String toColumnString = Integer.toString(toColumnChoice);
 
+        RemoteSpace fromSpace = getSpaceFromChoice(fromColumnChoice);
+        if (fromSpace.queryp(new ActualField(taskName)) == null) {
+            System.out.println("The task '" + taskName + "' is no longer in the selected column.");
+            return;
+        }
+
         requests.put("move", fromColumnString, taskName, clientName, toColumnString);
 
         System.out.println("Task moved from " + fromColumnChoice + " to " + toColumnChoice);
@@ -388,10 +394,16 @@ public class ClientRemoteSpace {
         System.out.println("Enter the new name for the task:");
         String newTaskName = input.nextLine();
 
+        RemoteSpace selectedColumnSpace = getSpaceFromChoice(columnChoice);
+        if (selectedColumnSpace.queryp(new ActualField(taskName)) == null) {
+            System.out.println("No task with the name \"" + taskName + "\" found in the selected column.");
+            return;
+        }
+
         String columnString = Integer.toString(columnChoice);
         requests.put("edit", columnString, taskName, clientName, newTaskName);
-
         System.out.println("Task " + taskName + " edited in " + columnString);
+
         refreshTaskLists();
     }
 
