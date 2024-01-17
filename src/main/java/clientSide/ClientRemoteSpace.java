@@ -17,7 +17,6 @@ public class ClientRemoteSpace {
     static RemoteSpace done;
     static RemoteSpace requests;
     static RemoteSpace responses;
-    static RemoteSpace clients;
     static String clientName;
 
 
@@ -137,9 +136,16 @@ public class ClientRemoteSpace {
             }
         }
 
-        System.out.println("Please enter the name of the task:");
-        String taskName = input.nextLine();
-
+        String taskName;
+        while (true) {
+            System.out.println("Please enter the name of the task:");
+            taskName = input.nextLine().trim();
+            if (taskName.isEmpty()) {
+                System.out.println("Invalid option. Task name can't be empty or only spaces.");
+            } else {
+                break;
+            }
+        }
 
         try {
             switch (columnChoice) {
@@ -205,6 +211,7 @@ public class ClientRemoteSpace {
                         System.out.println("Invalid option");
                         break;
                 }
+
                 break;
             } catch (Exception e) {
                 System.out.println("Invalid option. Please enter a number between 1 and 4.");
@@ -212,8 +219,16 @@ public class ClientRemoteSpace {
             }
         }
 
-        System.out.println("Please enter the name of the task:");
-        String taskName = input.nextLine();
+        String taskName;
+        while (true) {
+            System.out.println("Please enter the name of the task:");
+            taskName = input.nextLine().trim();
+            if (taskName.isEmpty()) {
+                System.out.println("Invalid option. Task name can't be empty or only spaces.");
+            } else {
+                break;
+            }
+        }
 
         try {
             switch (columnChoice) {
@@ -302,8 +317,16 @@ public class ClientRemoteSpace {
         }
 
 
-        System.out.println("Please enter the name of the task:");
-        String taskName = input.nextLine();
+        String taskName;
+        while (true) {
+            System.out.println("Please enter the name of the task:");
+            taskName = input.nextLine().trim();
+            if (taskName.isEmpty()) {
+                System.out.println("Invalid option. Task name can't be empty or only spaces.");
+            } else {
+                break;
+            }
+        }
 
         switch (fromColumnChoice) {
             case 1:
@@ -367,6 +390,29 @@ public class ClientRemoteSpace {
                     System.out.println("Invalid option. Please enter a number between 1 and 4.");
                     continue;
                 }
+
+                switch (columnChoice) {
+                    case 1:
+                        printSpaceTasks(backlog, "Backlog");
+                        System.out.println(" ");
+                        break;
+                    case 2:
+                        printSpaceTasks(doing, "Doing");
+                        System.out.println(" ");
+                        break;
+                    case 3:
+                        printSpaceTasks(review, "Review");
+                        System.out.println(" ");
+                        break;
+                    case 4:
+                        printSpaceTasks(done, "Done");
+                        System.out.println(" ");
+                        break;
+                    default:
+                        System.out.println("Invalid option");
+                        break;
+                }
+
                 break;
             } catch (Exception e) {
                 System.out.println("Invalid option. Please enter a number between 1 and 4.");
@@ -375,7 +421,7 @@ public class ClientRemoteSpace {
         }
 
         System.out.println("Please enter the name of the task to edit:");
-        String taskName = input.nextLine();
+        String taskName = input.nextLine().trim();
 
         switch (columnChoice) {
             case 1:
@@ -411,8 +457,16 @@ public class ClientRemoteSpace {
                 return;
         }
 
-        System.out.println("Enter the new name for the task:");
-        String newTaskName = input.nextLine();
+        String newTaskName;
+        while (true) {
+            System.out.println("Please enter the name of the task:");
+            newTaskName = input.nextLine().trim();
+            if (newTaskName.isEmpty()) {
+                System.out.println("Invalid option. Task name can't be empty or only spaces.");
+            } else {
+                break;
+            }
+        }
 
         RemoteSpace selectedColumnSpace = getSpaceFromChoice(columnChoice);
         if (selectedColumnSpace.queryp(new ActualField(taskName)) == null) {
@@ -453,7 +507,7 @@ public class ClientRemoteSpace {
     }
 
     public static void update() throws InterruptedException {
-        System.out.println("\n\n");
+        System.out.println("\n");
         printSpaceTasks(backlog, "Backlog");
         System.out.println(" ");
         printSpaceTasks(doing, "Doing");
