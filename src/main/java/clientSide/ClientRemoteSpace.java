@@ -3,7 +3,6 @@ package clientSide;
 import org.jspace.*;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -20,7 +19,6 @@ public class ClientRemoteSpace {
     static RemoteSpace responses;
     static RemoteSpace clients;
     static String clientName;
-    static RemoteSpace tokenSpace;
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -31,7 +29,6 @@ public class ClientRemoteSpace {
         done = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/done?keep");
         requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
         responses = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/responses?keep");
-        tokenSpace = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/token?keep");
 
         welcomeScreen();
     }
@@ -41,19 +38,12 @@ public class ClientRemoteSpace {
         System.out.println("Welcome to KanPlan!");
         System.out.println(" ");
         System.out.println("Insert your name here:");
+
         clientName = scan.nextLine();
         System.out.println(" ");
         System.out.println("Connected as: " + clientName);
-        System.out.println(" ");
 
-        printSpaceTasks(backlog, "Backlog");
-        System.out.println(" ");
-        printSpaceTasks(doing, "Doing");
-        System.out.println(" ");
-        printSpaceTasks(review, "Review");
-        System.out.println(" ");
-        printSpaceTasks(done, "Done");
-        System.out.println(" ");
+        update();
 
         while (true) {
             mainScreen();
@@ -96,14 +86,10 @@ public class ClientRemoteSpace {
                 removeTask();
                 break;
             case 3:
-//                tokenSpace.get(new ActualField("token"));
                 moveTask();
-//                tokenSpace.put("token");
                 break;
             case 4:
-//                tokenSpace.get(new ActualField("token"));
                 editTask();
-//                tokenSpace.put("token");
                 break;
             case 5:
                 update();
@@ -460,22 +446,14 @@ public class ClientRemoteSpace {
         Object[] response = responses.get(new ActualField(clientName), new FormalField(String.class));
         String responseString = (String) response[1];
         if (Objects.equals(responseString, "ok")) {
-            System.out.println("\n\n\n\n");
-            printSpaceTasks(backlog, "Backlog");
-            System.out.println(" ");
-            printSpaceTasks(doing, "Doing");
-            System.out.println(" ");
-            printSpaceTasks(review, "Review");
-            System.out.println(" ");
-            printSpaceTasks(done, "Done");
-            System.out.println(" ");
+            update();
         } else {
             System.out.println("Server: bad response");
         }
     }
 
     public static void update() throws InterruptedException {
-        System.out.println("\n\n\n\n");
+        System.out.println("\n\n");
         printSpaceTasks(backlog, "Backlog");
         System.out.println(" ");
         printSpaceTasks(doing, "Doing");
