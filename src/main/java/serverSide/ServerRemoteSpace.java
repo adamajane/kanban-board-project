@@ -32,6 +32,8 @@ public class ServerRemoteSpace {
             SpaceRepository repository = new SpaceRepository();
             SequentialSpace requests = new SequentialSpace();
             SequentialSpace responses = new SequentialSpace();
+            SequentialSpace tokenSpace = new SequentialSpace();
+            repository.add("token", tokenSpace);
             repository.add("requests", requests);
             repository.add("responses", responses);
             repository.add("backlog", backlog.getColumnSpace());
@@ -39,6 +41,7 @@ public class ServerRemoteSpace {
             repository.add("review", review.getColumnSpace());
             repository.add("done", done.getColumnSpace());
             repository.addGate(uri);
+            tokenSpace.put("token");
 
 
             while (true) {
@@ -138,8 +141,7 @@ public class ServerRemoteSpace {
                         }
                         break;
                     default:
-                        // ignore RPC for unknown functions
-                        continue;
+                        System.out.println("Here in default");
                 }
             }
         } catch (InterruptedException e) {

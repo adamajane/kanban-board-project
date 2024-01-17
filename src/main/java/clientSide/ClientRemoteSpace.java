@@ -20,6 +20,7 @@ public class ClientRemoteSpace {
     static RemoteSpace responses;
     static RemoteSpace clients;
     static String clientName;
+    static RemoteSpace tokenSpace;
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -30,6 +31,7 @@ public class ClientRemoteSpace {
         done = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/done?keep");
         requests = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/requests?keep");
         responses = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/responses?keep");
+        tokenSpace = new RemoteSpace("tcp://" + IP_ADDRESS + ":8080/token?keep");
 
         welcomeScreen();
     }
@@ -94,10 +96,14 @@ public class ClientRemoteSpace {
                 removeTask();
                 break;
             case 3:
+                tokenSpace.get(new ActualField("token"));
                 moveTask();
+                tokenSpace.put("token");
                 break;
             case 4:
+                tokenSpace.get(new ActualField("token"));
                 editTask();
+                tokenSpace.put("token");
                 break;
             case 5:
                 update();
@@ -265,6 +271,25 @@ public class ClientRemoteSpace {
             }
         }
 
+        int toColumnChoice;
+        while (true) {
+            System.out.println("Choose the column you want to move the task to:");
+            uiColumnsChoice();
+            try {
+                toColumnChoice = input.nextInt();
+                input.nextLine();
+                if (toColumnChoice < 1 || toColumnChoice > 4) {
+                    System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid option. Please enter a number between 1 and 4.");
+                input.nextLine();
+            }
+        }
+
+
         System.out.println("Please enter the name of the task:");
         String taskName = input.nextLine();
 
@@ -297,25 +322,6 @@ public class ClientRemoteSpace {
                 System.out.println("Invalid option.");
                 return;
         }
-
-        int toColumnChoice;
-        while (true) {
-            System.out.println("Choose the column you want to move the task to:");
-            uiColumnsChoice();
-            try {
-                toColumnChoice = input.nextInt();
-                input.nextLine();
-                if (toColumnChoice < 1 || toColumnChoice > 4) {
-                    System.out.println("Invalid option. Please enter a number between 1 and 4.");
-                    continue;
-                }
-                break;
-            } catch (Exception e) {
-                System.out.println("Invalid option. Please enter a number between 1 and 4.");
-                input.nextLine();
-            }
-        }
-
 
         String fromColumnString = Integer.toString(fromColumnChoice);
         String toColumnString = Integer.toString(toColumnChoice);
