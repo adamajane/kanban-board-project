@@ -197,6 +197,28 @@ public class ClientRemoteSpace {
                     System.out.println("Invalid option. Please enter a number between 1 and 4.");
                     continue;
                 }
+
+                switch (columnChoice) {
+                    case 1:
+                        printSpaceTasks(backlog, "Backlog");
+                        System.out.println(" ");
+                        break;
+                    case 2:
+                        printSpaceTasks(doing, "Doing");
+                        System.out.println(" ");
+                        break;
+                    case 3:
+                        printSpaceTasks(review, "Review");
+                        System.out.println(" ");
+                        break;
+                    case 4:
+                        printSpaceTasks(done, "Done");
+                        System.out.println(" ");
+                        break;
+                    default:
+                        System.out.println("Invalid option");
+                        break;
+                }
                 break;
             } catch (Exception e) {
                 System.out.println("Invalid option. Please enter a number between 1 and 4.");
@@ -212,6 +234,7 @@ public class ClientRemoteSpace {
                 case 1:
                     if (backlog.queryp(new ActualField(taskName)) == null) {
                         System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Backlog");
+                        update();
                         return;
                     }
                     requests.put("remove", "backlog", taskName, clientName, "");
@@ -220,6 +243,7 @@ public class ClientRemoteSpace {
                 case 2:
                     if (doing.queryp(new ActualField(taskName)) == null) {
                         System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Doing");
+                        update();
                         return;
                     }
                     requests.put("remove", "doing", taskName, clientName, "");
@@ -228,6 +252,7 @@ public class ClientRemoteSpace {
                 case 3:
                     if (review.queryp(new ActualField(taskName)) == null) {
                         System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Review");
+                        update();
                         return;
                     }
                     requests.put("remove", "review", taskName, clientName, "");
@@ -236,6 +261,7 @@ public class ClientRemoteSpace {
                 case 4:
                     if (done.queryp(new ActualField(taskName)) == null) {
                         System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Done");
+                        update();
                         return;
                     }
                     requests.put("remove", "done", taskName, clientName, "");
@@ -297,24 +323,28 @@ public class ClientRemoteSpace {
             case 1:
                 if (backlog.queryp(new ActualField(taskName)) == null) {
                     System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Backlog");
+                    update();
                     return;
                 }
                 break;
             case 2:
                 if (doing.queryp(new ActualField(taskName)) == null) {
                     System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Doing");
+                    update();
                     return;
                 }
                 break;
             case 3:
                 if (review.queryp(new ActualField(taskName)) == null) {
                     System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Review");
+                    update();
                     return;
                 }
                 break;
             case 4:
                 if (done.queryp(new ActualField(taskName)) == null) {
                     System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Done");
+                    update();
                     return;
                 }
                 break;
@@ -365,24 +395,28 @@ public class ClientRemoteSpace {
             case 1:
                 if (backlog.queryp(new ActualField(taskName)) == null) {
                     System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Backlog");
+                    update();
                     return;
                 }
                 break;
             case 2:
                 if (doing.queryp(new ActualField(taskName)) == null) {
                     System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Doing");
+                    update();
                     return;
                 }
                 break;
             case 3:
                 if (review.queryp(new ActualField(taskName)) == null) {
                     System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Review");
+                    update();
                     return;
                 }
                 break;
             case 4:
                 if (done.queryp(new ActualField(taskName)) == null) {
                     System.out.println("No task with the name " + "\"" + taskName + "\"" + " in Done");
+                    update();
                     return;
                 }
                 break;

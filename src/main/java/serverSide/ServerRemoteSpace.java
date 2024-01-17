@@ -80,18 +80,17 @@ public class ServerRemoteSpace {
                         arguments = requests.get(new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class), new FormalField(String.class));
                         String removeArgument = (String) arguments[2];
                         if (Objects.equals(columnName, "backlog")) {
-                            // TODO: Fix this
-                            if (backlog.getColumnSpace().queryp(new ActualField(removeArgument)) != null) {
-                                System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
-                                backlog.getColumnSpace().get(new ActualField(removeArgument));
-                                responses.put((String) clientName, "ok");
-                            } else {
-                                System.out.println("The task doesn't exit");
-                                responses.put((String) clientName, "ko");
-                            }
-                            // System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
-                            // backlog.getColumnSpace().get(new ActualField(removeArgument));
-                            // responses.put((String) clientName, "ok");
+//                            if (backlog.getColumnSpace().queryp(new ActualField(removeArgument)) != null) {
+//                                System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
+//                                backlog.getColumnSpace().get(new ActualField(removeArgument));
+//                                responses.put((String) clientName, "ok");
+//                            } else {
+//                                System.out.println("The task doesn't exit");
+//                                responses.put((String) clientName, "ko");
+//                            }
+                            System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
+                            backlog.getColumnSpace().get(new ActualField(removeArgument));
+                            responses.put((String) clientName, "ok");
                         } else if (Objects.equals(columnName, "doing")) {
                             System.out.println(arguments[3] + " removed " + arguments[2] + " from Doing");
                             doing.getColumnSpace().get(new ActualField(removeArgument));
