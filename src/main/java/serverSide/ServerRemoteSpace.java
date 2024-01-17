@@ -86,9 +86,9 @@ public class ServerRemoteSpace {
                                 System.out.println("The task doesn't exit");
                                 responses.put((String) clientName, "ko");
                             }
-                            System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
-                            backlog.getColumnSpace().get(new ActualField(removeArgument));
-                            responses.put((String) clientName, "ok");
+                            // System.out.println(arguments[3] + " removed " + arguments[2] + " from Backlog");
+                            // backlog.getColumnSpace().get(new ActualField(removeArgument));
+                            // responses.put((String) clientName, "ok");
                         } else if (Objects.equals(columnName, "doing")) {
                             System.out.println(arguments[3] + " removed " + arguments[2] + " from Doing");
                             doing.getColumnSpace().get(new ActualField(removeArgument));
