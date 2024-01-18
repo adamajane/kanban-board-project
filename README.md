@@ -27,8 +27,8 @@ It is recommended to run the program with IntelliJ IDEA.
 4. Click "Open" and select the ZIP file
 
 ## Running the program
-To run the program, please ensure that you have set up the correct IP address in the `Config` class.
-Any other collaborators must add the IP address in their `Config` class.
+To run the program, please ensure you have set up the correct IP address in the `Config` class.
+Any other collaborators must add the same IP address to their `Config` class.
 
-If you are running the program on the same computer as the server, you can use run the program as localhost using
+If you are running the program on the same computer as the server, you can run the program as localhost using
 `127.0.0.1`.
