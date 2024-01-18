@@ -65,7 +65,7 @@ public class Client {
             System.out.println(" ");
             try {
                 userOption = input.nextInt();
-                input.nextLine(); // This captures the newline after the integer input
+                input.nextLine();
                 if (userOption < 1 || userOption > 6) {
                     System.out.println("Invalid option. Please enter a number between 1 and 6.");
                     continue;
@@ -151,19 +151,23 @@ public class Client {
             switch (columnChoice) {
                 case 1:
                     requests.put("add", "backlog", taskName, clientName, "");
-                    System.out.println("Task added to Backlog");
+                    System.out.println("\n");
+                    System.out.println("Added the task " + "\"" + taskName + "\"" + " to Backlog");
                     break;
                 case 2:
                     requests.put("add", "doing", taskName, clientName, "");
-                    System.out.println("Task added to Doing");
+                    System.out.println("\n");
+                    System.out.println("Added the task " + "\"" + taskName + "\"" + " to Doing");
                     break;
                 case 3:
                     requests.put("add", "review", taskName, clientName, "");
-                    System.out.println("Task added to Review");
+                    System.out.println("\n");
+                    System.out.println("Added the task " + "\"" + taskName + "\"" + " to Review");
                     break;
                 case 4:
                     requests.put("add", "done", taskName, clientName, "");
-                    System.out.println("Task added to Done");
+                    System.out.println("\n");
+                    System.out.println("Added the task " + "\"" + taskName + "\"" + " to Done");
                     break;
                 default:
                     System.out.println("Invalid option");
@@ -239,7 +243,7 @@ public class Client {
                         return;
                     }
                     requests.put("remove", "backlog", taskName, clientName, "");
-                    System.out.println("Task removed from Backlog");
+                    System.out.println("Removed the task " + "\"" + taskName + "\"" + " from Backlog");
                     break;
                 case 2:
                     if (doing.queryp(new ActualField(taskName)) == null) {
@@ -248,7 +252,7 @@ public class Client {
                         return;
                     }
                     requests.put("remove", "doing", taskName, clientName, "");
-                    System.out.println("Task removed from Doing");
+                    System.out.println("Removed the task " + "\"" + taskName + "\"" + " from Doing");
                     break;
                 case 3:
                     if (review.queryp(new ActualField(taskName)) == null) {
@@ -257,7 +261,7 @@ public class Client {
                         return;
                     }
                     requests.put("remove", "review", taskName, clientName, "");
-                    System.out.println("Task removed from Review");
+                    System.out.println("Removed the task " + "\"" + taskName + "\"" + " from Review");
                     break;
                 case 4:
                     if (done.queryp(new ActualField(taskName)) == null) {
@@ -266,7 +270,7 @@ public class Client {
                         return;
                     }
                     requests.put("remove", "done", taskName, clientName, "");
-                    System.out.println("Task removed from Done");
+                    System.out.println("Removed the task " + "\"" + taskName + "\"" + " from Done");
                     break;
                 default:
                     System.out.println("Invalid option");
@@ -291,6 +295,29 @@ public class Client {
                     System.out.println("Invalid option. Please enter a number between 1 and 4.");
                     continue;
                 }
+
+                switch (fromColumnChoice) {
+                    case 1:
+                        printSpaceTasks(backlog, "Backlog");
+                        System.out.println(" ");
+                        break;
+                    case 2:
+                        printSpaceTasks(doing, "Doing");
+                        System.out.println(" ");
+                        break;
+                    case 3:
+                        printSpaceTasks(review, "Review");
+                        System.out.println(" ");
+                        break;
+                    case 4:
+                        printSpaceTasks(done, "Done");
+                        System.out.println(" ");
+                        break;
+                    default:
+                        System.out.println("Invalid option");
+                        break;
+                }
+
                 break;
             } catch (Exception e) {
                 System.out.println("Invalid option. Please enter a number between 1 and 4.");
@@ -373,7 +400,7 @@ public class Client {
 
         requests.put("move", fromColumnString, taskName, clientName, toColumnString);
 
-        System.out.println("Task moved from " + fromColumnChoice + " to " + toColumnChoice);
+        System.out.println("Moved task " + "\"" + taskName + "\"" + " from " + getColumnFromChoice(fromColumnChoice) + " to " + getColumnFromChoice(toColumnChoice));
         refreshTaskLists();
     }
 
@@ -476,7 +503,8 @@ public class Client {
 
         String columnString = Integer.toString(columnChoice);
         requests.put("edit", columnString, taskName, clientName, newTaskName);
-        System.out.println("Task " + taskName + " edited in " + columnString);
+
+        System.out.println("Edited task " + "\"" + taskName + "\"" + " to " + "\"" + newTaskName + "\"" + " in " + getColumnFromChoice(columnChoice));
 
         refreshTaskLists();
     }
@@ -493,6 +521,21 @@ public class Client {
                 return done;
             default:
                 return null;
+        }
+    }
+
+    public static String getColumnFromChoice(int choice) {
+        switch (choice) {
+            case 1:
+                return "Backlog";
+            case 2:
+                return "Doing";
+            case 3:
+                return "Review";
+            case 4:
+                return "Done";
+            default:
+                return "Invalid option";
         }
     }
 
