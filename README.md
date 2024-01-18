@@ -29,6 +29,8 @@ It is recommended to run the program with IntelliJ IDEA.
 ## Running the program
 To run the program, please ensure you have set up the correct IP address in the `Config` class.
 Any other collaborators must add the same IP address to their `Config` class.
+Then, the host first runs `serverMain` and the clients run `clientMain`.
 
 If you are running the program on the same computer as the server, you can run the program as localhost using
 `127.0.0.1`.
+Similarly, first run `serverMain` and then run `clientMain`.
