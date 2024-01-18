@@ -8,7 +8,7 @@ import java.util.List;
 public class Column {
 
     private String name;
-    private Space columnSpace; // TODO: May change from a random space
+    private Space columnSpace;
 
     public Column(String name) {
         this.name = name;
@@ -57,6 +57,5 @@ public class Column {
         return columnSpace;
     }
 
-    // TODO: edit(task)
 
 }
